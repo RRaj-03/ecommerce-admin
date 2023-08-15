@@ -31,6 +31,7 @@ import {
   FilterItem,
   Image,
   Product,
+  ProductOnFilterItem,
   Size,
   Store,
 } from "@prisma/client";
@@ -48,6 +49,7 @@ interface ProductFormProps {
   initialData:
     | (Product & {
         images: Image[];
+        filterItems: ProductOnFilterItem[];
       })
     | null;
   categories: Category[];
@@ -88,6 +90,9 @@ const ProductForm = ({
     defaultValues: initialData
       ? {
           ...initialData,
+          filterItemIds: initialData.filterItems.map(
+            (filter) => filter.filterItemId
+          ),
           price: parseFloat(String(initialData?.price)),
         }
       : {

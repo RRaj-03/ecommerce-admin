@@ -32,13 +32,15 @@ const OrdersClient = ({ data: initialData }: { data: OrderColumn[] }) => {
       />
 
       <Separator />
-      <DataTable
-        columns={columns}
-        data={data}
-        searchKey="products"
-        setIsPaid={setIsPaid}
-        isPaid={isPaid}
-      />
+      <div className="overflow-x-hidden">
+        <DataTable
+          columns={columns}
+          data={data}
+          searchKey="products"
+          setIsPaid={setIsPaid}
+          isPaid={isPaid}
+        />
+      </div>
     </>
   );
 };

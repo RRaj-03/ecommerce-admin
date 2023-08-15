@@ -163,21 +163,26 @@ model Image {
 }
 
 model Order {
-  id            String      @id @default(uuid())
-  firstName     String
-  lastName      String
-  phoneNumber   String
-  emailAddress  String
-  userId        String
-  transactionId String
-  storeId       String
-  store         Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems    OrderItem[]
-  isPaid        Boolean     @default(false)
-  phone         String      @default("")
-  address       String      @default("")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id              String      @id @default(uuid())
+  firstName       String
+  lastName        String
+  phoneNumber     String
+  emailAddress    String
+  userId          String
+  transactionId   String
+  storeId         String
+  store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems      OrderItem[]
+  invoiceId       String      @default("")
+  invoicePdfUrl   String      @default("")
+  invoiceUrl      String      @default("")
+  isPaid          Boolean     @default(false)
+  phone           String      @default("")
+  address         String      @default("")
+  orderStatus     String      @default("Unpaid")
+  refundReciptUrl String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   @@index([storeId])
 }

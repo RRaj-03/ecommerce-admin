@@ -90,6 +90,13 @@ export async function POST(
     },
   });
   const session = await stripe.checkout.sessions.create({
+    invoice_creation: {
+      enabled: true,
+      invoice_data: {
+        rendering_options: { amount_tax_display: "include_inclusive_tax" },
+        footer: "Order Id: " + order.id,
+      },
+    },
     line_items: line_items,
     mode: "payment",
     shipping_address_collection: {
@@ -104,13 +111,6 @@ export async function POST(
       orderId: order.id,
     },
   });
-  await prismadb.order.update({
-    where: {
-      id: order.id,
-    },
-    data: {
-      transactionId: session.payment_intent?.toString(),
-    },
-  });
+
   return NextResponse.json({ url: session.url }, { headers: corsHeader });
 }
