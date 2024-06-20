@@ -1,23 +1,23 @@
 import prismadb from "@/lib/prismadb";
 import React from "react";
 import SizeForm from "../components/sizeForm";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/actions/getAuth";
 
 const SizePage = async ({ params }: { params: { sizeId: string } }) => {
-  const { userId } = auth();
-  const size = await prismadb.size.findUnique({
-    where: {
-      id: params.sizeId,
-    },
-  });
+	const { userId } = await auth();
+	const size = await prismadb.size.findUnique({
+		where: {
+			id: params.sizeId,
+		},
+	});
 
-  return (
-    <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <SizeForm initialData={size} />
-      </div>
-    </div>
-  );
+	return (
+		<div className="flex-col">
+			<div className="flex-1 space-y-4 p-8 pt-6">
+				<SizeForm initialData={size} />
+			</div>
+		</div>
+	);
 };
 
 export default SizePage;

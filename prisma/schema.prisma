@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["linux-nixos"]
+  binaryTargets = ["debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -9,10 +9,24 @@ datasource db {
   relationMode = "prisma"
 }
 
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  isOwner   Boolean  @default(false)
+  image     Image?
+  stores    Store[]  @relation("UserToStore")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Store {
   id           String       @id @default(uuid())
   name         String
   userId       String
+  user         User         @relation("UserToStore", fields: [userId], references: [id])
   emailAddress String?
   phoneNumber  String?
   Address      String?
@@ -27,6 +41,8 @@ model Store {
   images       Image[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+
+  @@index([userId])
 }
 
 model Billboard {
@@ -158,9 +174,12 @@ model Image {
   updatedAt DateTime @updatedAt
   storeId   String?
   store     Store?   @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([productId])
   @@index([storeId])
+  @@index([userId]) // Add an index for the `user` field
 }
 
 model Order {

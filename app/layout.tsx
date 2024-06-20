@@ -4,30 +4,30 @@ import { Inter } from "next/font/google";
 import ModalPorvider from "@/Providers/modalPorvider";
 import { ToastProvider } from "@/Providers/toastProvider";
 import { ThemeProvider } from "@/Providers/themeProvider";
-import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Admin Portal",
-  description: "Admin Portal",
+	title: "Admin Portal",
+	description: "Admin Portal",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <ModalPorvider />
-            <ToastProvider />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+	return (
+		<html lang="en">
+			<body className={inter.className}>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+					<ModalPorvider />
+					<ToastProvider />
+					<Toaster />
+					{children}
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }

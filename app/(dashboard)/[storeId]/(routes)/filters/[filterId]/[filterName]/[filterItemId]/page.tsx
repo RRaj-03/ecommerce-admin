@@ -1,27 +1,27 @@
 import prismadb from "@/lib/prismadb";
 import React from "react";
 import FilterItemForm from "../components/filterItemForm";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/actions/getAuth";
 
 const FilterItemPage = async ({
-  params,
+	params,
 }: {
-  params: { filterItemId: string };
+	params: { filterItemId: string };
 }) => {
-  const { userId } = auth();
-  const filterItem = await prismadb.filterItem.findUnique({
-    where: {
-      id: params.filterItemId,
-    },
-  });
+	const { userId } = await auth();
+	const filterItem = await prismadb.filterItem.findUnique({
+		where: {
+			id: params.filterItemId,
+		},
+	});
 
-  return (
-    <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <FilterItemForm initialData={filterItem} />
-      </div>
-    </div>
-  );
+	return (
+		<div className="flex-col">
+			<div className="flex-1 space-y-4 p-8 pt-6">
+				<FilterItemForm initialData={filterItem} />
+			</div>
+		</div>
+	);
 };
 
 export default FilterItemPage;
