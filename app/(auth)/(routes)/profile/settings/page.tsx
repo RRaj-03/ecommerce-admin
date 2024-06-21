@@ -1,7 +1,9 @@
 import { Separator } from "@/components/ui/separator";
 import { AppearanceForm } from "./components/AppearenceForm";
+import { auth } from "@/actions/getAuth";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+	const { userId } = await auth();
 	return (
 		<div className="space-y-6">
 			<div>
@@ -12,7 +14,7 @@ export default function SettingsPage() {
 				</p>
 			</div>
 			<Separator />
-			<AppearanceForm />
+			<AppearanceForm userId={userId!} />
 		</div>
 	);
 }

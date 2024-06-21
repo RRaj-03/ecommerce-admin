@@ -3,34 +3,20 @@ import { changePasswordFormSchema } from "@/Schema/userSchema";
 import prismadb from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { decode } from "next-auth/jwt";
 export async function POST(req: NextRequest) {
 	try {
-		const body = await req.json();
-		const { token = "" } = body;
-		if (token === "") {
-			return NextResponse.json(
-				{ message: "Token is required" },
-				{ status: 400 }
-			);
-		}
-		let User;
-		try {
-			User = await decode({
-				token: token,
-				secret: process.env.NEXTAUTH_SECRET!,
-			});
-		} catch (error) {
+		const { userId } = await auth();
+		if (!userId)
 			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-		}
-		if (!User) {
+		const body = await req.json();
+		if (userId !== body.userId) {
 			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 		}
 		const result = changePasswordFormSchema.safeParse(body);
 		if (result.success) {
 			const { confirmPassword, currentPassword, newPassword } = result.data;
 			const user = await prismadb.user.findUnique({
-				where: { email: User.email! },
+				where: { id: userId },
 			});
 			if (!user) {
 				return NextResponse.json(
@@ -40,16 +26,11 @@ export async function POST(req: NextRequest) {
 			}
 			if (bcrypt.compareSync(currentPassword, user.password)) {
 				await prismadb.user.update({
-					where: { email: User.email! },
+					where: { id: userId },
 					data: {
 						password: bcrypt.hashSync(confirmPassword, 10),
 					},
 				});
-			} else {
-				return NextResponse.json(
-					{ message: "Wrong Current Password" },
-					{ status: 400 }
-				);
 			}
 			return NextResponse.json(
 				{ message: "Password Updated" },

@@ -12,6 +12,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { revalidatePath } from "next/cache";
 import { useSearchParams } from "next/navigation";
+import { is } from "date-fns/locale";
 
 interface UserAuthFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -142,6 +143,7 @@ export default function UserAuthForm({
 				firstName: signUpData.firstName,
 				lastName: signUpData.lastName,
 				password: signUpData.password,
+				isOwner: true,
 			});
 			const data = res.data;
 			if (data.code === 0) {

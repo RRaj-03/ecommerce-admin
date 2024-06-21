@@ -4,7 +4,14 @@ import bycrpt from "bcryptjs";
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
-		const { email, password, firstName, lastName, isOwner = false } = body;
+		const {
+			email,
+			password,
+			firstName,
+			lastName,
+			isOwner = false,
+			image = "",
+		} = body;
 
 		if (firstName === "") {
 			return NextResponse.json(
@@ -53,7 +60,7 @@ export async function POST(req: Request) {
 				isOwner,
 				image: {
 					create: {
-						url: "",
+						url: image,
 					},
 				},
 			},

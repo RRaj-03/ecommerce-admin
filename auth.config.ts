@@ -1,12 +1,8 @@
 import type { Account, NextAuthOptions, Profile, User } from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prismadb from "./lib/prismadb";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { JWT } from "next-auth/jwt";
-import { id } from "date-fns/locale";
 export const authConfig: NextAuthOptions = {
 	session: {
 		strategy: "jwt",
@@ -17,39 +13,59 @@ export const authConfig: NextAuthOptions = {
 		error: "/signin",
 		newUser: "/signin?newUser=true",
 	},
+	secret: process.env.NEXTAUTH_SECRET!,
 	callbacks: {
 		signIn: async ({ user, account, profile }) => {
-			if (account && account.type === "oauth") {
-				console.log("account", profile);
-				const user = await prismadb.user.findUnique({
-					where: { email: profile!.email! },
-					select: { id: true, email: true, firstName: true, lastName: true },
-				});
-				console.log("user", user);
-				if (user) {
-					return true;
-				}
-				console.log("profile", profile);
-				const newUser = await prismadb.user.create({
-					data: {
-						email: profile!.email!,
-						firstName: profile?.given_name
-							? profile?.given_name
-							: profile?.name,
-						lastName: profile?.family_name ? profile?.family_name : "",
-						password: bcrypt.hashSync(profile!.email!, 10),
-						isOwner: false,
-						image: {
-							create: {
-								url: profile?.picture!,
+			try {
+				if (account && account.type === "oauth") {
+					console.log("account", profile);
+					const user = await prismadb.user.findUnique({
+						where: { email: profile!.email! },
+						select: {
+							id: true,
+							email: true,
+							firstName: true,
+							lastName: true,
+							isOwner: true,
+						},
+					});
+					console.log("user", user);
+					if (user) {
+						if (!user.isOwner) {
+							await prismadb.user.update({
+								where: { id: user.id },
+								data: {
+									isOwner: true,
+								},
+							});
+						}
+						return true;
+					}
+					console.log("profile", profile);
+					const newUser = await prismadb.user.create({
+						data: {
+							email: profile!.email!,
+							firstName: profile?.given_name
+								? profile?.given_name
+								: profile?.name,
+							lastName: profile?.family_name ? profile?.family_name : "",
+							password: bcrypt.hashSync(profile!.email!, 10),
+							isOwner: true,
+							image: {
+								create: {
+									url: profile?.picture!,
+								},
 							},
 						},
-					},
-					select: { id: true, email: true, firstName: true, lastName: true },
-				});
-				console.log("newUser", newUser);
+						select: { id: true, email: true, firstName: true, lastName: true },
+					});
+					console.log("newUser", newUser);
+				}
+				return true;
+			} catch (e) {
+				console.log(e);
+				return false;
 			}
-			return true;
 		},
 	},
 	providers: [
@@ -97,6 +113,7 @@ export const authConfig: NextAuthOptions = {
 							lastName: true,
 							password: true,
 							image: true,
+							isOwner: true,
 						},
 					});
 					console.log("fourth");
@@ -116,6 +133,14 @@ export const authConfig: NextAuthOptions = {
 					console.log("six");
 					if (!passwordMatch) throw new Error("Invalid credentials");
 					console.log("seven");
+					if (!User.isOwner) {
+						await prismadb.user.update({
+							where: { id: User.id },
+							data: {
+								isOwner: true,
+							},
+						});
+					}
 					return newUser;
 				} catch (e: any) {
 					console.log("e", e);

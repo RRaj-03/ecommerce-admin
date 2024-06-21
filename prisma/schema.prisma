@@ -18,6 +18,7 @@ model User {
   isOwner   Boolean  @default(false)
   image     Image?
   stores    Store[]  @relation("UserToStore")
+  theme     String   @default("dark") // dark or light
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

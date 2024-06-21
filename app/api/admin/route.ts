@@ -1,10 +1,10 @@
 import { auth } from "@/actions/getAuth";
 import prismadb from "@/lib/prismadb";
-import { decode } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
 	// This is a POST request
+
 	try {
 		const body = await req.json();
 		if (!body?.email) {
@@ -30,29 +30,18 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
 	// This is a PUT request
 	try {
+		const { userId } = await auth();
+		if (!userId)
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 		const body = await req.json();
-		const { token = "", ...data } = body;
-		if (token === "") {
-			return NextResponse.json(
-				{ message: "Token is required" },
-				{ status: 400 }
-			);
-		}
-		let User;
-		try {
-			User = await decode({
-				token: token,
-				secret: process.env.NEXTAUTH_SECRET!,
-			});
-		} catch (error) {
+		console.log("userId", userId, body.userId);
+		if (userId !== body.userId) {
 			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 		}
-		if (!User) {
-			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-		}
+		const { userId: userID = "", ...data } = body;
 
 		const updatedUser = await prismadb.user.update({
-			where: { email: User.email! },
+			where: { id: userID },
 			data: {
 				...data,
 				image: {

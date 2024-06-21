@@ -1,11 +1,10 @@
 import { authConfig } from "@/auth.config";
 import prismadb from "@/lib/prismadb";
-import { ca } from "date-fns/locale";
 import { getServerSession } from "next-auth";
-import Email from "next-auth/providers/email";
 
 export const auth = async () => {
 	const session = await getServerSession(authConfig);
+	console.log("session", session);
 	try {
 		if (!session) {
 			return { userId: undefined, email: undefined };
