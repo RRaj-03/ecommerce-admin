@@ -5,7 +5,6 @@ import React from "react";
 
 const SetupLayout = async ({ children }: { children: React.ReactNode }) => {
 	const { userId } = await await auth();
-	console.log("userId", userId);
 
 	if (!userId) {
 		redirect("/auth");

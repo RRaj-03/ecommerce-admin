@@ -61,11 +61,9 @@ export default function UserAuthForm({
 			const data = res.data;
 			if (data.code === 0) {
 				setSignIn(true);
-				console.log("false");
 			}
 			if (data.code === 1) {
 				setSignUp(true);
-				console.log("true");
 			}
 		} catch (error: any) {
 			console.log("error", error);
@@ -82,14 +80,12 @@ export default function UserAuthForm({
 			return;
 		}
 		try {
-			console.log("new", signUpData.password);
 			const res = await SocialSignIn("credentials", {
 				email: email,
 				password: signUpData.password,
 				redirect: true,
 				callbackUrl: "/",
 			});
-			console.log("res", res);
 			// revalidatePath("/");
 			if (res!.error) {
 				toast.error(res!.error);
@@ -148,13 +144,10 @@ export default function UserAuthForm({
 			const data = res.data;
 			if (data.code === 0) {
 				setSignIn(true);
-				console.log("false");
 			}
 			if (data.code === 1) {
 				setSignUp(true);
-				console.log("true");
 			}
-			console.log("signUp", signUp);
 		} catch (error: any) {
 			console.log("error", error);
 			toast.error(error.response.data.message);
@@ -203,24 +196,6 @@ export default function UserAuthForm({
 						</div>
 					</div>
 					<div className="flex gap-y-2 flex-col">
-						{/* <Button
-							variant="outline"
-							type="button"
-							disabled={isLoading}
-							onClick={async () => {
-								setIsLoading(true);
-								const res = await SocialSignIn("github", { callbackUrl: "/" });
-								console.log("res", res);
-								setIsLoading(false);
-							}}
-						>
-							{isLoading ? (
-								<Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-							) : (
-								<Icons.gitHub className="mr-2 h-4 w-4" />
-							)}{" "}
-							GitHub
-						</Button> */}
 						<Button
 							variant="outline"
 							type="button"
@@ -228,7 +203,6 @@ export default function UserAuthForm({
 							onClick={async () => {
 								setIsLoading(true);
 								const res = await SocialSignIn("google", { callbackUrl: "/" });
-								console.log("res", res);
 								setIsLoading(false);
 							}}
 						>

@@ -16,7 +16,6 @@ export default async function Profile() {
 			lastName: true,
 		},
 	});
-	console.log("userId,user", userId, user);
 	return (
 		<div className="space-y-6">
 			<div>

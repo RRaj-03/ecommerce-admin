@@ -18,7 +18,6 @@ export const authConfig: NextAuthOptions = {
 		signIn: async ({ user, account, profile }) => {
 			try {
 				if (account && account.type === "oauth") {
-					console.log("account", profile);
 					const user = await prismadb.user.findUnique({
 						where: { email: profile!.email! },
 						select: {
@@ -29,7 +28,6 @@ export const authConfig: NextAuthOptions = {
 							isOwner: true,
 						},
 					});
-					console.log("user", user);
 					if (user) {
 						if (!user.isOwner) {
 							await prismadb.user.update({
@@ -41,7 +39,6 @@ export const authConfig: NextAuthOptions = {
 						}
 						return true;
 					}
-					console.log("profile", profile);
 					const newUser = await prismadb.user.create({
 						data: {
 							email: profile!.email!,
@@ -59,7 +56,6 @@ export const authConfig: NextAuthOptions = {
 						},
 						select: { id: true, email: true, firstName: true, lastName: true },
 					});
-					console.log("newUser", newUser);
 				}
 				return true;
 			} catch (e) {
@@ -98,11 +94,8 @@ export const authConfig: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials, req) {
-				console.log("first");
 				if (credentials === null || credentials === undefined) return null;
-				console.log("second");
 				if (!credentials.email || !credentials.password) return null;
-				console.log("third");
 				try {
 					const User = await prismadb.user.findUnique({
 						where: { email: credentials.email },
@@ -116,9 +109,7 @@ export const authConfig: NextAuthOptions = {
 							isOwner: true,
 						},
 					});
-					console.log("fourth");
 					if (!User) throw new Error("User not found");
-					console.log("five");
 					const passwordMatch = await bcrypt.compare(
 						credentials.password,
 						User.password
@@ -130,9 +121,7 @@ export const authConfig: NextAuthOptions = {
 						lastName: User.lastName,
 						image: User?.image?.url,
 					};
-					console.log("six");
 					if (!passwordMatch) throw new Error("Invalid credentials");
-					console.log("seven");
 					if (!User.isOwner) {
 						await prismadb.user.update({
 							where: { id: User.id },

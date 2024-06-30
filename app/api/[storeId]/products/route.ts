@@ -69,7 +69,6 @@ export async function POST(
 				},
 			},
 		}));
-		console.log("filterCreate", filterCreate);
 		const product = await prismadb.product.create({
 			data: {
 				name,

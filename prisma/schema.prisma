@@ -10,17 +10,40 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   password  String
   firstName String
   lastName  String
-  isOwner   Boolean  @default(false)
+  address   Address[]
+  isOwner   Boolean   @default(false)
   image     Image?
-  stores    Store[]  @relation("UserToStore")
-  theme     String   @default("dark") // dark or light
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  orders    Order[]
+  cart      Cart[]
+  stores    Store[]   @relation("UserToStore")
+  theme     String    @default("dark") // dark or light
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Address {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  order       Order[]
+  name        String
+  line1       String
+  line2       String?
+  city        String
+  state       String
+  country     String
+  postalCode  String
+  street      String
+  phoneNumber String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Store {
@@ -31,6 +54,7 @@ model Store {
   emailAddress String?
   phoneNumber  String?
   Address      String?
+  tax          Decimal      @default(0)
   categories   Category[]   @relation("StoreToCategory")
   billboards   Billboard[]  @relation("StoreToBillboard")
   sizes        Size[]       @relation("StoreToSize")
@@ -42,6 +66,8 @@ model Store {
   images       Image[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  Cart         Cart[]
+  coupouns     Coupouns[]
 
   @@index([userId])
 }
@@ -146,12 +172,55 @@ model Product {
   images      Image[]
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
-  orderItems  OrderItem[]
+  orders      Order[]
+  carts       Cart[]
 
   @@index([storeId])
   @@index([categoryId])
   @@index([sizeId])
   @@index([colorId])
+}
+
+model Cart {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  storeId   String
+  products  Product[]
+  subtotal  Decimal
+  discount  Decimal
+  total     Decimal
+  coupounId String?
+  coupoun   Coupouns? @relation(fields: [coupounId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Store     Store     @relation(fields: [storeId], references: [id])
+
+  @@unique([userId, storeId])
+  @@index([userId])
+  @@index([storeId])
+  @@index([coupounId])
+}
+
+model Coupouns {
+  id          String   @id @default(uuid())
+  description String
+  fixed       Boolean
+  amount      Decimal?
+  percentage  Decimal?
+  useBy       DateTime
+  oneTime     Boolean
+  code        String
+  archived    Boolean  @default(false)
+  cart        Cart[]
+  orders      Order[]
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([code])
+  @@index([storeId])
 }
 
 model ProductOnFilterItem {
@@ -184,37 +253,45 @@ model Image {
 }
 
 model Order {
-  id              String      @id @default(uuid())
-  firstName       String
-  lastName        String
-  phoneNumber     String
-  emailAddress    String
+  id              String    @id @default(uuid())
+  addressId       String
+  address         Address   @relation(fields: [addressId], references: [id])
   userId          String
+  user            User      @relation(fields: [userId], references: [id])
   transactionId   String
+  subtotal        Decimal
+  total           Decimal
+  paidAmount      Decimal?  @default(0)
+  paidAt          DateTime? @default(now())
   storeId         String
-  store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems      OrderItem[]
-  invoiceId       String      @default("")
-  invoicePdfUrl   String      @default("")
-  invoiceUrl      String      @default("")
-  isPaid          Boolean     @default(false)
-  phone           String      @default("")
-  address         String      @default("")
-  orderStatus     String      @default("Unpaid")
+  discount        Decimal   @default(0)
+  store           Store     @relation("StoreToOrder", fields: [storeId], references: [id])
+  Products        Product[]
+  coupounId       String?
+  coupouns        Coupouns? @relation(fields: [coupounId], references: [id])
+  invoiceId       String    @default("")
+  invoicePdfUrl   String    @default("")
+  invoiceUrl      String    @default("")
+  isPaid          Boolean   @default(false)
+  phone           String    @default("")
+  orderStatus     String    @default("Unpaid")
   refundReciptUrl String?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([storeId])
+  @@index([addressId])
+  @@index([userId])
+  @@index([coupounId])
 }
 
-model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+// model OrderItem {
+//   id        String  @id @default(uuid())
+//   orderId   String
+//   order     Order   @relation(fields: [orderId], references: [id])
+//   productId String
+//   product   Product @relation(fields: [productId], references: [id])
 
-  @@index([productId])
-  @@index([orderId])
-}
+//   @@index([productId])
+//   @@index([orderId])
+// }

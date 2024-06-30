@@ -26,6 +26,29 @@ export const changePasswordFormSchema = z
 	});
 
 export type changePasswordFormValues = z.infer<typeof changePasswordFormSchema>;
+export const AddressFormSchema = z.object({
+	name: z.string({ required_error: "Name is required." }),
+	phoneNumber: z.string({ required_error: "Phone number is required." }),
+	line1: z.string().min(2, {
+		message: "Address must be at least 2 characters.",
+	}),
+	line2: z.string().optional(),
+	street: z.string({ required_error: "Street is required." }),
+	city: z.string({
+		required_error: "City is required.",
+	}),
+	state: z.string({
+		required_error: "State is required.",
+	}),
+	country: z.string({
+		required_error: "Country is required.",
+	}),
+	postalCode: z.string({
+		required_error: "Postal code is required.",
+	}),
+});
+
+export type AddressFormValues = z.infer<typeof AddressFormSchema>;
 
 export const accountFormSchema = z.object({
 	firstName: z

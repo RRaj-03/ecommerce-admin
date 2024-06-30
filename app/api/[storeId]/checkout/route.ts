@@ -1,116 +1,170 @@
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
-import { NextResponse } from "next/server";
+import { decode } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const corsHeader = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+	"Access-Control-Allow-Origin": "*",
+	"Access-Control-Allow-Methods": "GET, POST, DELETE, PUT, OPTIONS",
+	"Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeader });
+	return NextResponse.json({}, { headers: corsHeader });
 }
 
 export async function POST(
-  request: Request,
-  { params }: { params: { storeId: string } }
+	request: NextRequest,
+	{ params }: { params: { storeId: string } }
 ) {
-  const { productIds, user } = await request.json();
+	let orderId = null;
+	try {
+		const { cartId, addressId, token } = await request.json();
+		if (!token) {
+			return NextResponse.json(
+				{ message: "Token is required" },
+				{ status: 400 }
+			);
+		}
+		let User;
+		try {
+			User = await decode({
+				token: token,
+				secret: process.env.NEXTAUTH_SECRET!,
+			});
+		} catch (error) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+		if (!User) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+		const redirectUrl = request.nextUrl.searchParams.get("redirectUrl");
 
-  if (!productIds || productIds.length === 0) {
-    return new NextResponse("Product ids are required", { status: 400 });
-  }
-  if (!user && !user.userId) {
-    return new NextResponse("User is required", { status: 400 });
-  }
-  const products = await prismadb.product.findMany({
-    where: {
-      id: {
-        in: productIds,
-      },
-    },
-    include: {
-      images: true,
-      size: true,
-      color: true,
-      filterItems: {
-        include: {
-          filterItem: {
-            include: {
-              filter: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-  products.forEach((product) => {
-    line_items.push({
-      quantity: 1,
-      price_data: {
-        currency: "INR",
-        product_data: {
-          name: product.name,
-          images: product.images.map((image) => image.url),
-          description: `Size: ${product.size.name}
-           | Color: ${product.color.name} | 
-           ${product.filterItems
-             .map(
-               (item) =>
-                 `${item.filterItem.filter.name}: ${item.filterItem.name} `
-             )
-             .join(" | ")}`,
-        },
-        unit_amount: product.price.toNumber() * 100,
-      },
-    });
-  });
-  const order = await prismadb.order.create({
-    data: {
-      userId: user.userId,
-      phoneNumber: user.phoneNumber,
-      emailAddress: user.emailAddress,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      storeId: params.storeId,
-      isPaid: false,
-      transactionId: "",
-      orderItems: {
-        create: productIds.map((productId: string) => ({
-          product: {
-            connect: {
-              id: productId,
-            },
-          },
-        })),
-      },
-    },
-  });
-  const session = await stripe.checkout.sessions.create({
-    invoice_creation: {
-      enabled: true,
-      invoice_data: {
-        rendering_options: { amount_tax_display: "include_inclusive_tax" },
-        footer: "Order Id: " + order.id,
-      },
-    },
-    line_items: line_items,
-    mode: "payment",
-    shipping_address_collection: {
-      allowed_countries: ["IN"],
-    },
-    phone_number_collection: {
-      enabled: true,
-    },
-    success_url: `${process.env.FORNTEND_STORE_URL}/cart?success=1`,
-    cancel_url: `${process.env.FORNTEND_STORE_URL}/cart?canceled=1`,
-    metadata: {
-      orderId: order.id,
-    },
-  });
+		if (!cartId) {
+			return NextResponse.json(
+				{ message: "CartId is required" },
+				{ status: 400 }
+			);
+		}
+		if (!addressId) {
+			return NextResponse.json(
+				{ message: "AddressId is required" },
+				{ status: 400 }
+			);
+		}
+		const cart = await prismadb.cart.findUnique({
+			where: {
+				id: cartId,
+			},
+			include: {
+				products: true,
+				coupoun: true,
+				user: true,
+			},
+		});
+		if (!cart) {
+			return NextResponse.json({ message: "Cart not found" }, { status: 404 });
+		}
+		if (cart.user.email !== User.email) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+		const address = await prismadb.address.findUnique({
+			where: {
+				id: addressId,
+			},
+		});
+		if (!address) {
+			return NextResponse.json(
+				{ message: "Address not found" },
+				{ status: 404 }
+			);
+		}
+		const order = await prismadb.order.create({
+			data: {
+				user: {
+					connect: {
+						email: User.email,
+					},
+				},
+				address: {
+					connect: {
+						id: addressId,
+					},
+				},
+				coupouns: {
+					connect: cart.coupoun ? { id: cart.coupoun.id } : undefined,
+				},
 
-  return NextResponse.json({ url: session.url }, { headers: corsHeader });
+				Products: {
+					connect: cart.products.map((product) => ({ id: product.id })),
+				},
+				total: cart.total,
+				subtotal: cart.subtotal,
+				discount: cart.discount,
+				transactionId: "",
+				store: {
+					connect: {
+						id: params.storeId,
+					},
+				},
+			},
+			include: {
+				Products: {
+					include: {
+						images: true,
+					},
+				},
+				store: true,
+			},
+		});
+		orderId = order.id;
+		const session = await stripe.checkout.sessions.create({
+			invoice_creation: {
+				enabled: true,
+				invoice_data: {
+					rendering_options: { amount_tax_display: "include_inclusive_tax" },
+					footer: "Order Id: " + order.id,
+				},
+			},
+			line_items: [
+				{
+					price_data: {
+						currency: "inr",
+						product_data: {
+							name: order.store.name,
+							images: [
+								"https://img.freepik.com/free-vector/quill-pen-logo-template_23-2149852432.jpg?size=338&ext=jpg&ga=GA1.1.1546980028.1719619200&semt=ais_user",
+							],
+						},
+						unit_amount: parseFloat(String(order.total)) * 100,
+					},
+					quantity: 1,
+				},
+			],
+			mode: "payment",
+			payment_method_types: ["card"],
+			success_url: `${redirectUrl}?success=1`,
+			cancel_url: `${redirectUrl}?canceled=1`,
+			metadata: {
+				orderId: order.id,
+			},
+			customer_email: User.email,
+		});
+
+		return NextResponse.json({ url: session.url }, { headers: corsHeader });
+	} catch (error) {
+		if (orderId) {
+			await prismadb.order.delete({
+				where: {
+					id: orderId,
+				},
+			});
+		}
+		console.log("[Checkout POST Error]", error);
+		return NextResponse.json(
+			{ message: "Internal Error", error },
+			{ status: 500 }
+		);
+	}
 }

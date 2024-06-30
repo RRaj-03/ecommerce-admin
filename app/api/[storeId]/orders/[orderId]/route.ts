@@ -1,6 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@/actions/getAuth";
 import { NextResponse } from "next/server";
+import { decode } from "next-auth/jwt";
 
 export async function GET(
 	req: Request,
@@ -13,6 +14,32 @@ export async function GET(
 	}
 ) {
 	try {
+		const token = req.headers.get("authorization")?.slice(7) || "";
+		if (token === "") {
+			return NextResponse.json(
+				{ message: "Token is required" },
+				{ status: 400 }
+			);
+		}
+		let User;
+		try {
+			User = await decode({
+				token: token,
+				secret: process.env.NEXTAUTH_SECRET!,
+			});
+		} catch (error) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+		if (!User) {
+			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+		}
+		const user = await prismadb.user.findUnique({
+			where: { email: User.email! },
+			include: { address: true },
+		});
+		if (!user) {
+			return NextResponse.json({ message: "User not found" }, { status: 404 });
+		}
 		if (!params.orderId) {
 			return new NextResponse("OrderId is required", { status: 400 });
 		}
@@ -22,15 +49,15 @@ export async function GET(
 				id: params.orderId,
 			},
 			include: {
-				orderItems: {
+				Products: {
 					include: {
-						product: {
-							include: {
-								images: true,
-							},
-						},
+						images: true,
 					},
 				},
+				address: true,
+				coupouns: true,
+				user: true,
+				store: true,
 			},
 		});
 		return NextResponse.json(order);

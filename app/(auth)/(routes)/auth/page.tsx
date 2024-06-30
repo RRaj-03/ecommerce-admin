@@ -16,7 +16,6 @@ export default function AuthenticationPage({
 }: {
 	searchParams: { error?: string; newuser?: string };
 }) {
-	console.log("query", searchParams);
 	const Error = searchParams?.error;
 
 	return (

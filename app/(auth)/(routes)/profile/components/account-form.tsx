@@ -54,7 +54,6 @@ export function AccountForm({
 		} catch (error: any) {
 			console.log("error", error);
 			toast.error(error?.response?.data?.message);
-			console.log("done");
 		} finally {
 			setLoading(false);
 		}

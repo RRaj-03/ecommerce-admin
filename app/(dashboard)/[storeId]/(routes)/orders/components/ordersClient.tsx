@@ -11,38 +11,36 @@ import { DataTable } from "@/components/ui/dataTable";
 import { ApiList } from "@/components/ui/apiList";
 
 const OrdersClient = ({ data: initialData }: { data: OrderColumn[] }) => {
-  const [isPaid, setIsPaid] = useState(true);
-  const [data, setData] = useState<OrderColumn[]>(initialData);
-  const router = useRouter();
-  const params = useParams();
+	const [isPaid, setIsPaid] = useState(true);
+	const [data, setData] = useState<OrderColumn[]>(initialData);
+	const router = useRouter();
+	const params = useParams();
 
-  useEffect(() => {
-    console.log("isPaid", isPaid);
-    const newData = initialData.filter((item) => {
-      console.log("item.isPaid", item.isPaid);
-      return item.isPaid === isPaid;
-    });
-    setData(newData);
-  }, [isPaid]);
-  return (
-    <>
-      <Heading
-        title={`Order (${data.length})`}
-        desc="Manage orders for your store"
-      />
+	useEffect(() => {
+		const newData = initialData.filter((item) => {
+			return item.isPaid === isPaid;
+		});
+		setData(newData);
+	}, [isPaid]);
+	return (
+		<>
+			<Heading
+				title={`Order (${data.length})`}
+				desc="Manage orders for your store"
+			/>
 
-      <Separator />
-      <div className="overflow-x-hidden">
-        <DataTable
-          columns={columns}
-          data={data}
-          searchKey="products"
-          setIsPaid={setIsPaid}
-          isPaid={isPaid}
-        />
-      </div>
-    </>
-  );
+			<Separator />
+			<div className="overflow-x-hidden">
+				<DataTable
+					columns={columns}
+					data={data}
+					searchKey="products"
+					setIsPaid={setIsPaid}
+					isPaid={isPaid}
+				/>
+			</div>
+		</>
+	);
 };
 
 export default OrdersClient;

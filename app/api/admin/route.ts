@@ -34,7 +34,6 @@ export async function PUT(req: NextRequest) {
 		if (!userId)
 			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 		const body = await req.json();
-		console.log("userId", userId, body.userId);
 		if (userId !== body.userId) {
 			return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 		}
