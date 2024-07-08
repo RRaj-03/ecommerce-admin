@@ -45,11 +45,11 @@ export async function PATCH(
 ) {
 	try {
 		const { userId } = await auth();
-		const body = await req.json();
-		const { name, billboardId } = body;
 		if (!userId) {
 			return new NextResponse("Unauthenticated", { status: 401 });
 		}
+		const body = await req.json();
+		const { name, billboardId } = body;
 		if (!name) {
 			return new NextResponse("Name is required", { status: 400 });
 		}

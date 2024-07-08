@@ -9,21 +9,28 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  password  String
-  firstName String
-  lastName  String
-  address   Address[]
-  isOwner   Boolean   @default(false)
-  image     Image?
-  orders    Order[]
-  cart      Cart[]
-  stores    Store[]   @relation("UserToStore")
-  theme     String    @default("dark") // dark or light
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              String            @id @default(uuid())
+  email           String            @unique
+  password        String
+  firstName       String
+  lastName        String
+  address         Address[]
+  isOwner         Boolean           @default(false)
+  role            Role              @default(USER)
+  image           Image?
+  orders          Order[]
+  cart            Cart[]
+  stores          Store[]           @relation("UserToStore")
+  theme           String            @default("dark") // dark or light
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  OrderStatusItem OrderStatusItem[]
 }
 
 model Address {
@@ -253,36 +260,64 @@ model Image {
 }
 
 model Order {
-  id              String    @id @default(uuid())
+  id              String            @id @default(uuid())
   addressId       String
-  address         Address   @relation(fields: [addressId], references: [id])
+  address         Address           @relation(fields: [addressId], references: [id])
   userId          String
-  user            User      @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id])
   transactionId   String
   subtotal        Decimal
   total           Decimal
-  paidAmount      Decimal?  @default(0)
-  paidAt          DateTime? @default(now())
+  paidAmount      Decimal?          @default(0)
+  paidAt          DateTime?         @default(now())
   storeId         String
-  discount        Decimal   @default(0)
-  store           Store     @relation("StoreToOrder", fields: [storeId], references: [id])
+  discount        Decimal           @default(0)
+  store           Store             @relation("StoreToOrder", fields: [storeId], references: [id])
   Products        Product[]
   coupounId       String?
-  coupouns        Coupouns? @relation(fields: [coupounId], references: [id])
-  invoiceId       String    @default("")
-  invoicePdfUrl   String    @default("")
-  invoiceUrl      String    @default("")
-  isPaid          Boolean   @default(false)
-  phone           String    @default("")
-  orderStatus     String    @default("Unpaid")
+  coupouns        Coupouns?         @relation(fields: [coupounId], references: [id])
+  invoiceId       String            @default("")
+  invoicePdfUrl   String            @default("")
+  invoiceUrl      String            @default("")
+  isPaid          Boolean           @default(false)
+  phone           String            @default("")
   refundReciptUrl String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  status          OrderStatus       @default(Unpaid)
+  orderStatus     OrderStatusItem[]
 
   @@index([storeId])
   @@index([addressId])
   @@index([userId])
   @@index([coupounId])
+}
+
+model OrderStatusItem {
+  id        String      @id @default(uuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id])
+  status    OrderStatus
+  changedBy User?       @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([orderId])
+  @@index([userId])
+}
+
+enum OrderStatus {
+  Unpaid
+  Paid
+  Processing
+  Shipped
+  Arrived
+  Departed
+  Delivered
+  Cancelled
+  RefundInitiated
+  Refunded
 }
 
 // model OrderItem {

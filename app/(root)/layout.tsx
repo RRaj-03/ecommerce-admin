@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const SetupLayout = async ({ children }: { children: React.ReactNode }) => {
-	const { userId } = await await auth();
+	const { userId } = await auth();
 
 	if (!userId) {
 		redirect("/auth");

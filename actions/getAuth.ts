@@ -10,10 +10,15 @@ export const auth = async () => {
 		}
 		const user = await prismadb.user.findUnique({
 			where: { email: session.user!.email! },
-			select: { id: true, email: true, isOwner: true },
+			select: { id: true, email: true, isOwner: true, role: true },
 		});
 		if (!user) return { userId: undefined, email: undefined };
-		return { userId: user.id, email: user.email, isOwner: user.isOwner };
+		return {
+			userId: user.id,
+			email: user.email,
+			isOwner: user.isOwner,
+			role: user.role,
+		};
 	} catch (error) {
 		return { userId: undefined, email: undefined };
 	}

@@ -2,6 +2,7 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@/actions/getAuth";
 import { NextResponse } from "next/server";
 import { decode } from "next-auth/jwt";
+import { stripe } from "@/lib/stripe";
 
 export async function GET(
 	req: Request,
@@ -106,7 +107,13 @@ export async function PATCH(
 				id: params.orderId,
 			},
 			data: {
-				orderStatus: status,
+				status,
+				orderStatus: {
+					create: {
+						status,
+						userId,
+					},
+				},
 			},
 		});
 
@@ -114,5 +121,78 @@ export async function PATCH(
 	} catch (error) {
 		console.log("[Order_PATCH]", error);
 		return new NextResponse("Internal Server error", { status: 500 });
+	}
+}
+export async function PUT(
+	req: Request,
+	{
+		params,
+	}: {
+		params: {
+			orderId: string;
+		};
+	}
+) {
+	try {
+		const { userId } = await auth();
+		if (!userId) {
+			return new NextResponse("Unauthenticated", { status: 401 });
+		}
+		if (!params.orderId) {
+			return new NextResponse("OrderId is required", {
+				status: 400,
+			});
+		}
+
+		let order = await prismadb.order.findFirst({
+			where: {
+				id: params.orderId,
+				user: {
+					id: userId,
+				},
+			},
+		});
+		if (!order)
+			return new NextResponse("Order not found", {
+				status: 404,
+			});
+		if (order.status !== "Cancelled") {
+			return new NextResponse("Cancel Before Initiating Refund", {
+				status: 400,
+			});
+		}
+
+		const session = await stripe.refunds.create({
+			payment_intent: order.transactionId,
+			metadata: {
+				orderId: order.id,
+			},
+		});
+		order = await prismadb.order.update({
+			where: {
+				id: params.orderId,
+
+				user: {
+					id: userId,
+				},
+			},
+			data: {
+				orderStatus: {
+					create: {
+						status: "RefundInitiated",
+						userId,
+					},
+				},
+				status: "RefundInitiated",
+			},
+		});
+		return NextResponse.json({
+			message: "Order Refund Initiated",
+		});
+	} catch (error) {
+		console.log("[Order_]", error);
+		return new NextResponse("Internal Server error", {
+			status: 500,
+		});
 	}
 }

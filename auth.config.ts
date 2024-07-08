@@ -15,7 +15,19 @@ export const authConfig: NextAuthOptions = {
 	},
 	secret: process.env.NEXTAUTH_SECRET!,
 	callbacks: {
-		signIn: async ({ user, account, profile }) => {
+		signIn: async ({
+			account,
+			profile,
+		}: {
+			account: Account | null;
+			profile?:
+				| (Profile & {
+						given_name?: string;
+						family_name?: string;
+						picture?: string;
+				  })
+				| undefined;
+		}) => {
 			try {
 				if (account && account.type === "oauth") {
 					const user = await prismadb.user.findUnique({
@@ -44,7 +56,7 @@ export const authConfig: NextAuthOptions = {
 							email: profile!.email!,
 							firstName: profile?.given_name
 								? profile?.given_name
-								: profile?.name,
+								: profile?.name || "",
 							lastName: profile?.family_name ? profile?.family_name : "",
 							password: bcrypt.hashSync(profile!.email!, 10),
 							isOwner: true,

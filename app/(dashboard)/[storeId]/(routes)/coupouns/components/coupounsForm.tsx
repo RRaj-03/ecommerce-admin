@@ -65,7 +65,7 @@ const CoupounForm = ({ initialData }: CoupounFormProps) => {
 			? {
 					...initialData,
 					amount: parseFloat(String(initialData?.amount)) || undefined,
-					percentage: parseFloat(String(initialData?.amount)) || undefined,
+					percentage: parseFloat(String(initialData?.percentage)) || undefined,
 			  }
 			: {
 					description: "",
@@ -96,6 +96,7 @@ const CoupounForm = ({ initialData }: CoupounFormProps) => {
 			router.push(`/${params.storeId}/coupouns`);
 			toast.success(toastMessage);
 		} catch (error) {
+			console.log("error", error);
 			toast.error("Something Went Wrong");
 		} finally {
 			setLoading(false);

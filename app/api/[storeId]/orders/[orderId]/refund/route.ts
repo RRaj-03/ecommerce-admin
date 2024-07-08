@@ -35,23 +35,46 @@ export async function POST(
 			});
 		}
 
-		const order = await prismadb.order.update({
+		const order = await prismadb.order.findFirst({
+			where: {
+				id: params.orderId,
+			},
+		});
+		if (!order) {
+			return new NextResponse("Order not found", {
+				status: 404,
+				headers: corsHeader,
+			});
+		}
+		if (order.status !== "Cancelled") {
+			return new NextResponse("Order is not cancelled", {
+				status: 400,
+				headers: corsHeader,
+			});
+		}
+
+		const session = await stripe.refunds.create({
+			payment_intent: order.transactionId,
+			metadata: {
+				orderId: order.id,
+			},
+		});
+		const orderRefund = await prismadb.order.update({
 			where: {
 				id: params.orderId,
 			},
 			data: {
 				orderStatus: {
 					create: {
-						status: "Cancelled",
+						status: "RefundInitiated",
 						userId,
 					},
 				},
-				status: "Cancelled",
+				status: "RefundInitiated",
 			},
 		});
-
 		return NextResponse.json(
-			{ message: "Order Cancelled Successfully" },
+			{ message: "Refund Initiated Successfully" },
 			{ headers: corsHeader }
 		);
 	} catch (error) {

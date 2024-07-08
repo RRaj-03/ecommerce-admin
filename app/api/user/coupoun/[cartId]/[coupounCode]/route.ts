@@ -172,13 +172,21 @@ export async function POST(
 				{ status: 404 }
 			);
 		}
-		if (new Date(coupoun.useBy) < new Date()) {
+		if (coupoun.archived) {
 			return NextResponse.json(
 				{ message: "Coupoun is expired" },
 				{ status: 404 }
 			);
 		}
-		if (coupoun.archived) {
+		if (new Date(coupoun.useBy) < new Date()) {
+			const coupun = await prismadb.coupouns.update({
+				where: {
+					code: coupounCode,
+				},
+				data: {
+					archived: true,
+				},
+			});
 			return NextResponse.json(
 				{ message: "Coupoun is expired" },
 				{ status: 404 }

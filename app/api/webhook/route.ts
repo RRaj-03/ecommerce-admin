@@ -25,7 +25,12 @@ export async function POST(request: Request) {
 		await prismadb.order.update({
 			where: { id: session.metadata?.orderId },
 			data: {
-				orderStatus: "REFUNDED",
+				orderStatus: {
+					create: {
+						status: "Refunded",
+					},
+				},
+				status: "Refunded",
 				refundReciptUrl: session.receipt_url,
 			},
 		});
@@ -94,6 +99,25 @@ export async function POST(request: Request) {
 			},
 			data: {
 				isArchived: true,
+			},
+		});
+		await prismadb.cart.update({
+			where: {
+				userId_storeId: {
+					userId: order.userId,
+					storeId: order.storeId,
+				},
+			},
+			data: {
+				products: {
+					set: [],
+				},
+				subtotal: 0,
+				total: 0,
+				discount: 0,
+				coupoun: {
+					disconnect: true,
+				},
 			},
 		});
 		return new NextResponse(null, { status: 200 });

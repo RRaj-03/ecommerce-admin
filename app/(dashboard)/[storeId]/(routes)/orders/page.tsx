@@ -35,7 +35,7 @@ const Orders = async ({ params }: { params: { storeId: string } }) => {
 		transactionId: item.transactionId,
 		isPaid: item.isPaid,
 		createdAt: format(item.createdAt, "MMMM do, yyyy"),
-		status: item.orderStatus,
+		status: item.status,
 	}));
 
 	return (
