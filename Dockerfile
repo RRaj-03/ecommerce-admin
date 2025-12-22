@@ -1,5 +1,5 @@
 
-FROM node:18-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -38,6 +38,9 @@ ARG NEXT_PUBLIC_CLERK_SIGN_IN_URL
 ARG NEXT_PUBLIC_CLERK_SIGN_UP_URL
 ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
 ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+ARG DATABASE_URL
+
+RUN npm run build
 
 RUN npm run build
 
