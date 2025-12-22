@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "./button";
-import { ImagePlus, Trash2 } from "lucide-react";
+import { ImagePlus, Trash2, Wand2 } from "lucide-react";
 import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary";
 import { useParams } from "next/navigation";
@@ -9,6 +9,7 @@ interface ImageUploadProps {
   disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
+  onEnhance?: (value: string) => void;
   value: string[];
 }
 
@@ -16,6 +17,7 @@ const ImageUpload = ({
   disabled,
   onChange,
   onRemove,
+  onEnhance,
   value,
 }: ImageUploadProps) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -39,7 +41,17 @@ const ImageUpload = ({
               key={url}
               className="relative w-[200px] h-[200px]  rounded-md overflow-hidden"
             >
-              <div className="z-10 absolute top-2 right-2">
+              <div className="z-10 absolute top-2 right-2 flex gap-x-2">
+                 {onEnhance && (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => onEnhance(url)}
+                  >
+                    <Wand2 className="h-4 w-4" />
+                  </Button>
+                )}
                 <Button
                   type="button"
                   variant={"destructive"}

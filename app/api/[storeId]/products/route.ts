@@ -19,12 +19,12 @@ export async function POST(
       name,
       price,
       categoryId,
-      sizeId,
-      colorId,
+
       images,
       isFeatured,
       isArchived,
       filterItemIds,
+      inventory,
     } = body;
 
     if (!userId) {
@@ -37,15 +37,13 @@ export async function POST(
     if (!price) {
       return new NextResponse("Price is Required", { status: 400 });
     }
+    if (!inventory) {
+      return new NextResponse("Inventory is Required", { status: 400 });
+    }
     if (!categoryId) {
       return new NextResponse("Category id is Required", { status: 400 });
     }
-    if (!colorId) {
-      return new NextResponse("Color id is Required", { status: 400 });
-    }
-    if (!sizeId) {
-      return new NextResponse("Size id is Required", { status: 400 });
-    }
+
     if (!images || !images.length) {
       return new NextResponse("Images are Required", { status: 400 });
     }
@@ -78,10 +76,10 @@ export async function POST(
         name,
         price,
         categoryId,
-        sizeId,
-        colorId,
+
         isArchived,
         isFeatured,
+        inventory,
         storeId: params.storeId,
         filterItems: {
           create: filterCreate,
@@ -112,27 +110,51 @@ export async function GET(
   try {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get("categoryId") || undefined;
-    const sizeId = searchParams.get("sizeId") || undefined;
-    const colorId = searchParams.get("colorId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
 
     if (!params.storeId) {
-      return new NextResponse("StoreId is Required", { status: 400 });
+      return new NextResponse("StoreId is required", { status: 400 });
     }
+
+    const storeFilters = await prismadb.filter.findMany({
+      where: {
+        storeId: params.storeId,
+      },
+    });
+
+    const filterConditions = storeFilters
+      .map((filter) => {
+        const value = searchParams.get(filter.id);
+        if (value) {
+          const selectedFilterItemIds = value.split(",");
+          if (selectedFilterItemIds.length > 0) {
+            return {
+              filterItems: {
+                some: {
+                  filterItemId: {
+                    in: selectedFilterItemIds,
+                  },
+                },
+              },
+            };
+          }
+        }
+        return null;
+      })
+      .filter((condition) => condition !== null);
 
     const product = await prismadb.product.findMany({
       where: {
         storeId: params.storeId,
         categoryId,
-        colorId,
-        sizeId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
+        AND: [
+          ...filterConditions,
+        ],
       },
       include: {
         images: true,
-        color: true,
-        size: true,
         category: true,
         filterItems: {
           include: {

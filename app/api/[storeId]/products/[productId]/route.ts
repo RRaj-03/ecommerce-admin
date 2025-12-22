@@ -23,9 +23,7 @@ export async function GET(
       },
       include: {
         images: true,
-        size: true,
         category: true,
-        color: true,
         filterItems: {
           include: {
             filterItem: {
@@ -62,11 +60,11 @@ export async function PATCH(
       name,
       price,
       categoryId,
-      sizeId,
-      colorId,
+      filterItemIds,
       images,
       isFeatured,
       isArchived,
+      inventory,
     } = body;
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -77,15 +75,13 @@ export async function PATCH(
     if (!price) {
       return new NextResponse("Price is Required", { status: 400 });
     }
+    if (!inventory) {
+      return new NextResponse("Inventory is Required", { status: 400 });
+    }
     if (!categoryId) {
       return new NextResponse("Category id is Required", { status: 400 });
     }
-    if (!colorId) {
-      return new NextResponse("Color id is Required", { status: 400 });
-    }
-    if (!sizeId) {
-      return new NextResponse("Size id is Required", { status: 400 });
-    }
+
     if (!images || !images.length) {
       return new NextResponse("Images are Required", { status: 400 });
     }
@@ -109,12 +105,14 @@ export async function PATCH(
         name,
         price,
         categoryId,
-        sizeId,
-        colorId,
         isArchived,
         isFeatured,
+        inventory,
         storeId: params.storeId,
         images: {
+          deleteMany: {},
+        },
+        filterItems: {
           deleteMany: {},
         },
       },
@@ -128,6 +126,15 @@ export async function PATCH(
           createMany: {
             data: [...images.map((image: { url: string }) => image)],
           },
+        },
+        filterItems: {
+          create: filterItemIds.map((id: string) => ({
+            filterItem: {
+              connect: {
+                id: id,
+              },
+            },
+          })),
         },
       },
     });

@@ -1,0 +1,14 @@
+import { defineConfig } from "prisma/config";
+
+if (typeof (process as any).loadEnvFile === "function") {
+  (process as any).loadEnvFile();
+}
+
+export default defineConfig({
+  datasource: {
+    url:
+      process.env.DATABASE_URL ||
+      process.env.NEXT_PUBLIC_DATABASE_URL ||
+      "postgresql://postgres:password@localhost:5432/ecommerce",
+  },
+});
