@@ -26,13 +26,11 @@ import { useOrigin } from "@/hooks/useOrigin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Category,
-  Color,
   Filter,
   FilterItem,
   Image,
   Product,
   ProductOnFilterItem,
-  Size,
   Store,
 } from "@prisma/client";
 import axios from "axios";
@@ -53,8 +51,6 @@ interface ProductFormProps {
       })
     | null;
   categories: Category[];
-  colors: Color[];
-  sizes: Size[];
   filters: (Filter & { filterItems: FilterItem[] })[];
 }
 
@@ -62,9 +58,8 @@ const FormSchema = z.object({
   name: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
   price: z.coerce.number().min(1),
+  inventory: z.coerce.number().min(0),
   categoryId: z.string().min(1),
-  colorId: z.string().min(1),
-  sizeId: z.string().min(1),
   filterItemIds: z.string().array(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
@@ -73,8 +68,6 @@ type ProductFormValues = z.infer<typeof FormSchema>;
 const ProductForm = ({
   initialData,
   categories,
-  colors,
-  sizes,
   filters,
 }: ProductFormProps) => {
   const origin = useOrigin();
@@ -94,14 +87,14 @@ const ProductForm = ({
             (filter) => filter.filterItemId
           ),
           price: parseFloat(String(initialData?.price)),
+          inventory: parseInt(String(initialData?.inventory)),
         }
       : {
           name: "",
           images: [],
           price: 0,
+          inventory: 0,
           categoryId: "",
-          colorId: "",
-          sizeId: "",
           isFeatured: false,
           isArchived: false,
           filterItemIds: [],
@@ -193,6 +186,37 @@ const ProductForm = ({
                           ...field.value.filter((image) => image.url !== url),
                         ])
                       }
+                      onEnhance={async (url) => {
+                        try {
+                          setLoading(true);
+                          const selectedCategoryId = form.getValues("categoryId");
+                          const categoryName = categories.find(
+                            (c) => c.id === selectedCategoryId
+                          )?.name;
+                          
+                          const prompt = categoryName
+                            ? `product photography of a ${categoryName}, professional studio lighting, 4k`
+                            : undefined;
+
+                          console.log("Enhancing image with params:", params);
+                          const response = await axios.post(
+                            `/api/${params.storeId}/ai-enhance`,
+                            {
+                              imageUrl: url,
+                              prompt,
+                            },
+                          );
+
+                          // Add the new image to the list
+                          field.onChange([...field.value, { url: response.data.url }]);
+                          toast.success("Image enhanced successfully!");
+                        } catch (error: any) {
+                          console.error("Enhance error:", error);
+                          toast.error(`Failed: ${error.response?.data || error.message}`);
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -236,6 +260,26 @@ const ProductForm = ({
               }}
             />
             <FormField
+              name="inventory"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Inventory:</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        disabled={loading}
+                        placeholder="0"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
               name="categoryId"
               control={form.control}
               render={({ field }) => {
@@ -269,80 +313,7 @@ const ProductForm = ({
                 );
               }}
             />
-            <FormField
-              name="sizeId"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Size:</FormLabel>
-                    <Select
-                      disabled={loading}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder={"Select a size"}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {sizes.map((size) => (
-                          <SelectItem key={size.id} value={size.id}>
-                            {size.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-            <FormField
-              name="colorId"
-              control={form.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Color:</FormLabel>
-                    <Select
-                      disabled={loading}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder={"Select a color"}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {colors.map((color) => (
-                          <SelectItem key={color.id} value={color.id}>
-                            <div className="flex items-center gap-x-2">
-                              <div
-                                className="h-6 w-6 rounded-full mr-2"
-                                style={{ backgroundColor: color.value }}
-                              ></div>
-                              <span>{color.name}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
+
             <FormField
               name="filterItemIds"
               control={form.control}
@@ -358,8 +329,10 @@ const ProductForm = ({
                         <Select
                           disabled={loading}
                           onValueChange={(value) => {
-                            field.value[index] = value;
-                            // field.value[index] = event.target.value
+                            const current = field.value || [];
+                            const newValues = [...current];
+                            newValues[index] = value;
+                            field.onChange(newValues);
                           }}
                           value={field.value[index]}
                           defaultValue={field.value[index]}

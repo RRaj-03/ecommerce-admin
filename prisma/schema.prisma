@@ -1,12 +1,10 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["linux-nixos"]
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
 }
 
 model Store {
@@ -18,8 +16,6 @@ model Store {
   Address      String?
   categories   Category[]   @relation("StoreToCategory")
   billboards   Billboard[]  @relation("StoreToBillboard")
-  sizes        Size[]       @relation("StoreToSize")
-  colors       Color[]      @relation("StoreToColor")
   products     Product[]    @relation("StoreToProduct")
   filters      Filter[]     @relation("StoreToFilter")
   filterItems  FilterItem[] @relation("StoreToFilterItem")
@@ -34,7 +30,7 @@ model Billboard {
   storeId   String
   store     Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   label     String
-  imageURL  String
+  imageURL  String @db.Text
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   category  Category[]
@@ -57,31 +53,7 @@ model Category {
   @@index([storeId])
 }
 
-model Size {
-  id        String    @id @default(uuid())
-  storeId   String
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name      String
-  value     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
 
-  @@index([storeId])
-}
-
-model Color {
-  id        String    @id @default(uuid())
-  storeId   String
-  store     Store     @relation("StoreToColor", fields: [storeId], references: [id])
-  name      String
-  value     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
-
-  @@index([storeId])
-}
 
 model FilterItem {
   id        String                @id @default(uuid())
@@ -121,10 +93,8 @@ model Product {
   price       Decimal
   isFeatured  Boolean               @default(false)
   isArchived  Boolean               @default(false)
-  sizeId      String
-  size        Size                  @relation(fields: [sizeId], references: [id])
-  colorId     String
-  color       Color                 @relation(fields: [colorId], references: [id])
+  inventory   Int                   @default(0)
+
   filterItems ProductOnFilterItem[]
   images      Image[]
   createdAt   DateTime              @default(now())
@@ -133,8 +103,7 @@ model Product {
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
-  @@index([colorId])
+
 }
 
 model ProductOnFilterItem {
@@ -153,7 +122,7 @@ model Image {
   id        String   @id @default(uuid())
   productId String?
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String
+  url       String @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   storeId   String?

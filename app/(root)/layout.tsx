@@ -13,6 +13,7 @@ const SetupLayout = async ({ children }: { children: React.ReactNode }) => {
   const store = await prismadb.store.findFirst({
     where: { userId },
   });
+
   if (store) {
     redirect(`/${store.id}`);
   }
