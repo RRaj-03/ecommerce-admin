@@ -12,9 +12,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["@huggingface/transformers"],
-  },
+  experimental: {},
   eslint: {
     ignoreDuringBuilds: true,
   },
