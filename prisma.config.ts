@@ -7,8 +7,7 @@ if (typeof (process as any).loadEnvFile === "function") {
 export default defineConfig({
   datasource: {
     url:
-      process.env.DATABASE_URL ||
-      process.env.NEXT_PUBLIC_DATABASE_URL ||
-      "postgresql://postgres:password@localhost:5432/ecommerce",
+      (process.env.DATABASE_URL as string) ||
+      (process.env.DIRECT_URL as string),
   },
 });
