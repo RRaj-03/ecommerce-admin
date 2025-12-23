@@ -23,7 +23,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useOrigin } from "@/hooks/useOrigin";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Billboard, Category, Store } from "@prisma/client";
+import { Billboard, Category, Store } from "@/generated/prisma/client";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";

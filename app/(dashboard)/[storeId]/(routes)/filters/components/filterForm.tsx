@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useOrigin } from "@/hooks/useOrigin";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Filter, Store } from "@prisma/client";
+import { Filter, Store } from "@/generated/prisma/client";
 import {
   Select,
   SelectTrigger,

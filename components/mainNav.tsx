@@ -5,7 +5,7 @@ import { useParams, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import axios from "axios";
-import { Filter } from "@prisma/client";
+import { Filter } from "@/generated/prisma/client";
 import {
   NavigationMenu,
   NavigationMenuContent,

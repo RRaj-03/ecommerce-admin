@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Store } from "@prisma/client";
+import { Store } from "@/generated/prisma/client";
 import { useModalStore } from "@/hooks/useModalStore";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "./ui/button";

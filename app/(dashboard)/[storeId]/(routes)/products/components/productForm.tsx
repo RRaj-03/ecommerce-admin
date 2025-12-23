@@ -32,7 +32,7 @@ import {
   Product,
   ProductOnFilterItem,
   Store,
-} from "@prisma/client";
+} from "@/generated/prisma/client";
 import axios from "axios";
 import { url } from "inspector";
 import { Trash2 } from "lucide-react";
@@ -189,11 +189,12 @@ const ProductForm = ({
                       onEnhance={async (url) => {
                         try {
                           setLoading(true);
-                          const selectedCategoryId = form.getValues("categoryId");
+                          const selectedCategoryId =
+                            form.getValues("categoryId");
                           const categoryName = categories.find(
                             (c) => c.id === selectedCategoryId
                           )?.name;
-                          
+
                           const prompt = categoryName
                             ? `product photography of a ${categoryName}, professional studio lighting, 4k`
                             : undefined;
@@ -204,15 +205,20 @@ const ProductForm = ({
                             {
                               imageUrl: url,
                               prompt,
-                            },
+                            }
                           );
 
                           // Add the new image to the list
-                          field.onChange([...field.value, { url: response.data.url }]);
+                          field.onChange([
+                            ...field.value,
+                            { url: response.data.url },
+                          ]);
                           toast.success("Image enhanced successfully!");
                         } catch (error: any) {
                           console.error("Enhance error:", error);
-                          toast.error(`Failed: ${error.response?.data || error.message}`);
+                          toast.error(
+                            `Failed: ${error.response?.data || error.message}`
+                          );
                         } finally {
                           setLoading(false);
                         }

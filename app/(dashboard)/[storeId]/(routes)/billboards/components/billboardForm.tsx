@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useOrigin } from "@/hooks/useOrigin";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Billboard, Store } from "@prisma/client";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -24,6 +23,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
+import { Billboard } from "@/generated/prisma/client";
 interface BillboardFormProps {
   initialData: Billboard | null;
 }
