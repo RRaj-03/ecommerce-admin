@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -54,7 +54,7 @@ export async function PATCH(
   }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const body = await req.json();
     const {
       name,
@@ -65,6 +65,13 @@ export async function PATCH(
       isFeatured,
       isArchived,
       inventory,
+      description,
+      measurements,
+      materialsAndCare,
+      assembly,
+      sku,
+      compareAtPrice,
+      tags,
     } = body;
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -108,6 +115,13 @@ export async function PATCH(
         isArchived,
         isFeatured,
         inventory,
+        description: description || null,
+        measurements: measurements || null,
+        materialsAndCare: materialsAndCare || null,
+        assembly: assembly || null,
+        sku: sku || null,
+        compareAtPrice: compareAtPrice || null,
+        tags: tags ? (typeof tags === 'string' ? tags.split(",").map((t: string) => t.trim()) : tags) : [],
         storeId: params.storeId,
         images: {
           deleteMany: {},
@@ -156,7 +170,7 @@ export async function DELETE(
   }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });

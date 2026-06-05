@@ -8,7 +8,11 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/AdminUser'
+export type * from './models/Customer'
 export type * from './models/Store'
+export type * from './models/StoreTheme'
+export type * from './models/PaymentConfig'
 export type * from './models/Billboard'
 export type * from './models/Category'
 export type * from './models/FilterItem'
@@ -17,5 +21,7 @@ export type * from './models/Product'
 export type * from './models/ProductOnFilterItem'
 export type * from './models/Image'
 export type * from './models/Order'
+export type * from './models/OrderStatusHistory'
 export type * from './models/OrderItem'
+export type * from './models/CustomerAddress'
 export type * from './commonInputTypes'

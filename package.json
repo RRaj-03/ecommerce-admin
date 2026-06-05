@@ -4,8 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "npx prisma generate && next build",
+    "start": "next start",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:push": "npx prisma db push",
+    "db:generate": "npx prisma generate",
+    "db:studio": "npx prisma studio",
+    "docker:up": "docker compose -f ../docker-compose.yml up -d",
+    "docker:down": "docker compose -f ../docker-compose.yml down",
+    "dev:local": "npm run docker:up && sleep 2 && npm run db:push && npm run db:generate && npm run db:seed && next dev"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.23.2",
@@ -24,10 +31,12 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@tanstack/react-table": "^8.9.3",
+    "@types/bcryptjs": "^2.4.6",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.8.0",
     "clsx": "^2.0.0",
@@ -35,6 +44,7 @@
     "date-fns": "^2.30.0",
     "debug": "^4.4.3",
     "dotenv": "^17.2.3",
+    "iron-session": "^8.0.4",
     "lucide-react": "^0.263.1",
     "next": "^13.5.7",
     "next-cloudinary": "^4.17.1",

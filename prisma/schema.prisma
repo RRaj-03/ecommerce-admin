@@ -4,24 +4,130 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
-model Store {
-  id           String       @id @default(uuid())
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
   name         String
-  userId       String
-  emailAddress String?
-  phoneNumber  String?
-  Address      String?
-  categories   Category[]   @relation("StoreToCategory")
-  billboards   Billboard[]  @relation("StoreToBillboard")
-  products     Product[]    @relation("StoreToProduct")
-  filters      Filter[]     @relation("StoreToFilter")
-  filterItems  FilterItem[] @relation("StoreToFilterItem")
-  orders       Order[]      @relation("StoreToOrder")
-  images       Image[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Customer {
+  id           String   @id @default(uuid())
+  storeId      String   // which store deployment this customer belongs to
+  email        String
+  passwordHash String   @default("") // empty for OAuth-only accounts
+  firstName    String
+  lastName     String
+  phone        String   @default("")
+  googleId     String?
+  avatar       String?
+  addresses    CustomerAddress[] @relation("CustomerToAddress")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // scoped unique constraints — same email/googleId allowed on different stores
+  @@unique([storeId, email])
+  @@unique([storeId, googleId])
+}
+
+model Store {
+  id            String          @id @default(uuid())
+  name          String
+  userId        String
+  emailAddress  String?
+  phoneNumber   String?
+  Address       String?
+  categories    Category[]      @relation("StoreToCategory")
+  billboards    Billboard[]     @relation("StoreToBillboard")
+  products      Product[]       @relation("StoreToProduct")
+  filters       Filter[]        @relation("StoreToFilter")
+  filterItems   FilterItem[]    @relation("StoreToFilterItem")
+  orders        Order[]         @relation("StoreToOrder")
+  images        Image[]
+  theme         StoreTheme?
+  paymentConfig PaymentConfig?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model StoreTheme {
+  id               String   @id @default(uuid())
+  storeId          String   @unique
+  store            Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  // Theme preset: "default", "midnight", "forest", "sunset", "ocean", "rose", "custom"
+  preset           String   @default("default")
+
+  // Custom color palette (HSL values)
+  primaryColor     String   @default("222.2 47.4% 11.2%")
+  secondaryColor   String   @default("210 40% 96.1%")
+  accentColor      String   @default("210 40% 96.1%")
+  backgroundColor  String   @default("0 0% 100%")
+  foregroundColor  String   @default("222.2 84% 4.9%")
+  mutedColor       String   @default("210 40% 96.1%")
+  mutedForeground  String   @default("215.4 16.3% 46.9%")
+  borderColor      String   @default("214.3 31.8% 91.4%")
+  cardColor        String   @default("0 0% 100%")
+  destructiveColor String   @default("0 84.2% 60.2%")
+
+  // Dark mode overrides
+  darkPrimary      String   @default("210 40% 98%")
+  darkSecondary    String   @default("217.2 32.6% 17.5%")
+  darkAccent       String   @default("217.2 32.6% 17.5%")
+  darkBackground   String   @default("222.2 84% 4.9%")
+  darkForeground   String   @default("210 40% 98%")
+  darkMuted        String   @default("217.2 32.6% 17.5%")
+  darkMutedFg      String   @default("215 20.2% 65.1%")
+  darkBorder       String   @default("217.2 32.6% 17.5%")
+  darkCard         String   @default("222.2 84% 4.9%")
+  darkDestructive  String   @default("0 62.8% 30.6%")
+
+  // Typography
+  fontFamily       String   @default("Inter")
+  headingFont      String   @default("Inter")
+
+  // Layout
+  borderRadius     String   @default("0.5rem")
+  navbarStyle      String   @default("default")
+  footerStyle      String   @default("default")
+  productCardStyle String   @default("default")
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model PaymentConfig {
+  id                String   @id @default(uuid())
+  storeId           String   @unique
+  store             Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  // Stripe
+  stripeEnabled     Boolean  @default(true)
+  stripeKey         String   @default("")
+
+  // PhonePe / UPI
+  phonepeEnabled    Boolean  @default(false)
+  phonepeMerchantId String   @default("")
+  phonepeSaltKey    String   @default("")
+  phonepeSaltIndex  Int      @default(1)
+
+  // Cash on Delivery
+  codEnabled        Boolean  @default(false)
+  codMinOrder       Decimal  @default(0)
+  codMaxOrder       Decimal  @default(99999)
+
+  // General
+  currency          String   @default("INR")
+  taxRate           Decimal  @default(0)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Billboard {
@@ -29,7 +135,7 @@ model Billboard {
   storeId   String
   store     Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
   label     String
-  imageURL  String @db.Text
+  imageURL  String     @db.Text
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   category  Category[]
@@ -51,8 +157,6 @@ model Category {
   @@index([billboardId])
   @@index([storeId])
 }
-
-
 
 model FilterItem {
   id        String                @id @default(uuid())
@@ -83,33 +187,46 @@ model Filter {
 }
 
 model Product {
-  id          String                @id @default(uuid())
-  storeId     String
-  store       Store                 @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId  String
-  category    Category              @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name        String
-  price       Decimal
-  isFeatured  Boolean               @default(false)
-  isArchived  Boolean               @default(false)
-  inventory   Int                   @default(0)
+  id              String                @id @default(uuid())
+  storeId         String
+  store           Store                 @relation("StoreToProduct", fields: [storeId], references: [id])
+  categoryId      String
+  category        Category              @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name            String
+  price           Decimal
+  isFeatured      Boolean               @default(false)
+  isArchived      Boolean               @default(false)
+  inventory       Int                   @default(0)
 
-  filterItems ProductOnFilterItem[]
-  images      Image[]
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt
-  orderItems  OrderItem[]
+  // Enhanced product fields
+  description     String?               @db.Text
+  measurements    String?               @db.Text
+  materialsAndCare String?              @db.Text
+  assembly        String?               @db.Text
+  sku             String?
+  slug            String?
+  weight          Decimal?
+  compareAtPrice  Decimal?
+  tags            String[]
+  metaTitle       String?
+  metaDescription String?               @db.Text
+
+  filterItems     ProductOnFilterItem[]
+  images          Image[]
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  orderItems      OrderItem[]
 
   @@index([storeId])
   @@index([categoryId])
-
+  @@index([slug])
 }
 
 model ProductOnFilterItem {
   product      Product    @relation(fields: [productId], references: [id])
-  productId    String // relation scalar field (used in the `@relation` attribute above)
+  productId    String
   filterItem   FilterItem @relation(fields: [filterItemId], references: [id])
-  filterItemId String // relation scalar field (used in the `@relation` attribute above)
+  filterItemId String
   assignedAt   DateTime   @default(now())
 
   @@id([productId, filterItemId])
@@ -121,7 +238,7 @@ model Image {
   id        String   @id @default(uuid())
   productId String?
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String @db.Text
+  url       String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   storeId   String?
@@ -132,37 +249,82 @@ model Image {
 }
 
 model Order {
-  id              String      @id @default(uuid())
-  firstName       String
-  lastName        String
-  phoneNumber     String
-  emailAddress    String
-  userId          String
-  transactionId   String
-  storeId         String
-  store           Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems      OrderItem[]
-  invoiceId       String      @default("")
-  invoicePdfUrl   String      @default("")
-  invoiceUrl      String      @default("")
-  isPaid          Boolean     @default(false)
-  phone           String      @default("")
-  address         String      @default("")
-  orderStatus     String      @default("Unpaid")
-  refundReciptUrl String?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id                String               @id @default(uuid())
+  firstName         String
+  lastName          String
+  phoneNumber       String
+  emailAddress      String
+  userId            String
+  transactionId     String
+  storeId           String
+  store             Store                @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems        OrderItem[]
+  invoiceId         String               @default("")
+  invoicePdfUrl     String               @default("")
+  invoiceUrl        String               @default("")
+  isPaid            Boolean              @default(false)
+  phone             String               @default("")
+  address           String               @default("")
+  orderStatus       String               @default("Unpaid")
+  refundReciptUrl   String?
+  totalAmount       Decimal              @default(0)
+  taxAmount         Decimal              @default(0)
+
+  // Enhanced tracking fields
+  trackingNumber    String?
+  trackingUrl       String?
+  carrier           String?
+  paymentMethod     String               @default("stripe")
+  estimatedDelivery DateTime?
+  statusHistory     OrderStatusHistory[]
+
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
 
   @@index([storeId])
+  @@index([userId])
+}
+
+model OrderStatusHistory {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
 }
 
 model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  id          String   @id @default(uuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  quantity    Int      @default(1)
+  priceAtTime Decimal?
 
   @@index([productId])
   @@index([orderId])
+}
+
+
+model CustomerAddress {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation("CustomerToAddress", fields: [customerId], references: [id], onDelete: Cascade)
+  
+  name       String   // e.g., "Home", "Office"
+  street     String
+  city       String
+  state      String
+  pincode    String
+  country    String   @default("India")
+  isDefault  Boolean  @default(false)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([customerId])
 }

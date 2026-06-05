@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import React from "react";
 import SettingsForm from "./components/settings";
@@ -11,7 +11,7 @@ const SettingsPage = async ({
     storeId: string;
   };
 }) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     redirect("/sign-in");
   }

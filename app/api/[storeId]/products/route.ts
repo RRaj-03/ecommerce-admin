@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -13,18 +13,24 @@ export async function POST(
   }
 ) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const body = await req.json();
     const {
       name,
       price,
       categoryId,
-
       images,
       isFeatured,
       isArchived,
       filterItemIds,
       inventory,
+      description,
+      measurements,
+      materialsAndCare,
+      assembly,
+      sku,
+      compareAtPrice,
+      tags,
     } = body;
 
     if (!userId) {
@@ -76,10 +82,16 @@ export async function POST(
         name,
         price,
         categoryId,
-
         isArchived,
         isFeatured,
         inventory,
+        description: description || null,
+        measurements: measurements || null,
+        materialsAndCare: materialsAndCare || null,
+        assembly: assembly || null,
+        sku: sku || null,
+        compareAtPrice: compareAtPrice || null,
+        tags: tags ? tags.split(",").map((t: string) => t.trim()) : [],
         storeId: params.storeId,
         filterItems: {
           create: filterCreate,

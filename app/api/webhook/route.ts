@@ -59,7 +59,6 @@ export async function POST(request: Request) {
     const addressString = addressComponents
       .filter((c) => c !== null)
       .join(", ");
-    console.log("session", session);
     const order = await prismadb.order.update({
       where: { id: session?.metadata?.orderId },
       data: {
@@ -67,8 +66,19 @@ export async function POST(request: Request) {
         isPaid: true,
         address: addressString,
         phone: session.customer_details?.phone || "",
+        paymentMethod: "stripe",
+        orderStatus: "Processing",
       },
       include: { orderItems: true },
+    });
+
+    // Log status history
+    await prismadb.orderStatusHistory.create({
+      data: {
+        orderId: order.id,
+        status: "Processing",
+        note: "Payment confirmed via Stripe",
+      },
     });
 
     return new NextResponse(null, { status: 200 });

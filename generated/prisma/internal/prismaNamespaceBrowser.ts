@@ -51,7 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  AdminUser: 'AdminUser',
+  Customer: 'Customer',
   Store: 'Store',
+  StoreTheme: 'StoreTheme',
+  PaymentConfig: 'PaymentConfig',
   Billboard: 'Billboard',
   Category: 'Category',
   FilterItem: 'FilterItem',
@@ -60,7 +64,9 @@ export const ModelName = {
   ProductOnFilterItem: 'ProductOnFilterItem',
   Image: 'Image',
   Order: 'Order',
-  OrderItem: 'OrderItem'
+  OrderStatusHistory: 'OrderStatusHistory',
+  OrderItem: 'OrderItem',
+  CustomerAddress: 'CustomerAddress'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,6 +85,35 @@ export const TransactionIsolationLevel = {
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const AdminUserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
+
+
+export const CustomerScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  googleId: 'googleId',
+  avatar: 'avatar',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
 export const StoreScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -91,6 +126,64 @@ export const StoreScalarFieldEnum = {
 } as const
 
 export type StoreScalarFieldEnum = (typeof StoreScalarFieldEnum)[keyof typeof StoreScalarFieldEnum]
+
+
+export const StoreThemeScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  preset: 'preset',
+  primaryColor: 'primaryColor',
+  secondaryColor: 'secondaryColor',
+  accentColor: 'accentColor',
+  backgroundColor: 'backgroundColor',
+  foregroundColor: 'foregroundColor',
+  mutedColor: 'mutedColor',
+  mutedForeground: 'mutedForeground',
+  borderColor: 'borderColor',
+  cardColor: 'cardColor',
+  destructiveColor: 'destructiveColor',
+  darkPrimary: 'darkPrimary',
+  darkSecondary: 'darkSecondary',
+  darkAccent: 'darkAccent',
+  darkBackground: 'darkBackground',
+  darkForeground: 'darkForeground',
+  darkMuted: 'darkMuted',
+  darkMutedFg: 'darkMutedFg',
+  darkBorder: 'darkBorder',
+  darkCard: 'darkCard',
+  darkDestructive: 'darkDestructive',
+  fontFamily: 'fontFamily',
+  headingFont: 'headingFont',
+  borderRadius: 'borderRadius',
+  navbarStyle: 'navbarStyle',
+  footerStyle: 'footerStyle',
+  productCardStyle: 'productCardStyle',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StoreThemeScalarFieldEnum = (typeof StoreThemeScalarFieldEnum)[keyof typeof StoreThemeScalarFieldEnum]
+
+
+export const PaymentConfigScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  stripeEnabled: 'stripeEnabled',
+  stripeKey: 'stripeKey',
+  phonepeEnabled: 'phonepeEnabled',
+  phonepeMerchantId: 'phonepeMerchantId',
+  phonepeSaltKey: 'phonepeSaltKey',
+  phonepeSaltIndex: 'phonepeSaltIndex',
+  codEnabled: 'codEnabled',
+  codMinOrder: 'codMinOrder',
+  codMaxOrder: 'codMaxOrder',
+  currency: 'currency',
+  taxRate: 'taxRate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentConfigScalarFieldEnum = (typeof PaymentConfigScalarFieldEnum)[keyof typeof PaymentConfigScalarFieldEnum]
 
 
 export const BillboardScalarFieldEnum = {
@@ -150,6 +243,17 @@ export const ProductScalarFieldEnum = {
   isFeatured: 'isFeatured',
   isArchived: 'isArchived',
   inventory: 'inventory',
+  description: 'description',
+  measurements: 'measurements',
+  materialsAndCare: 'materialsAndCare',
+  assembly: 'assembly',
+  sku: 'sku',
+  slug: 'slug',
+  weight: 'weight',
+  compareAtPrice: 'compareAtPrice',
+  tags: 'tags',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -195,6 +299,13 @@ export const OrderScalarFieldEnum = {
   address: 'address',
   orderStatus: 'orderStatus',
   refundReciptUrl: 'refundReciptUrl',
+  totalAmount: 'totalAmount',
+  taxAmount: 'taxAmount',
+  trackingNumber: 'trackingNumber',
+  trackingUrl: 'trackingUrl',
+  carrier: 'carrier',
+  paymentMethod: 'paymentMethod',
+  estimatedDelivery: 'estimatedDelivery',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -202,13 +313,43 @@ export const OrderScalarFieldEnum = {
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
+export const OrderStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  status: 'status',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
+
+
 export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
-  productId: 'productId'
+  productId: 'productId',
+  quantity: 'quantity',
+  priceAtTime: 'priceAtTime'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+export const CustomerAddressScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  name: 'name',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  pincode: 'pincode',
+  country: 'country',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerAddressScalarFieldEnum = (typeof CustomerAddressScalarFieldEnum)[keyof typeof CustomerAddressScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -63,6 +63,13 @@ const FormSchema = z.object({
   filterItemIds: z.string().array(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
+  description: z.string().optional(),
+  measurements: z.string().optional(),
+  materialsAndCare: z.string().optional(),
+  assembly: z.string().optional(),
+  sku: z.string().optional(),
+  compareAtPrice: z.coerce.number().optional(),
+  tags: z.string().optional(),
 });
 type ProductFormValues = z.infer<typeof FormSchema>;
 const ProductForm = ({
@@ -88,6 +95,13 @@ const ProductForm = ({
           ),
           price: parseFloat(String(initialData?.price)),
           inventory: parseInt(String(initialData?.inventory)),
+          compareAtPrice: initialData.compareAtPrice ? parseFloat(String(initialData.compareAtPrice)) : undefined,
+          description: initialData.description || "",
+          measurements: initialData.measurements || "",
+          materialsAndCare: initialData.materialsAndCare || "",
+          assembly: initialData.assembly || "",
+          sku: initialData.sku || "",
+          tags: (initialData.tags || []).join(", "),
         }
       : {
           name: "",
@@ -98,6 +112,13 @@ const ProductForm = ({
           isFeatured: false,
           isArchived: false,
           filterItemIds: [],
+          description: "",
+          measurements: "",
+          materialsAndCare: "",
+          assembly: "",
+          sku: "",
+          compareAtPrice: undefined,
+          tags: "",
         },
   });
   const [open, setOpen] = useState(false);
@@ -105,13 +126,18 @@ const ProductForm = ({
   const onSubmit = async (data: ProductFormValues) => {
     try {
       setLoading(true);
+      // Transform tags from comma-separated string to array
+      const payload = {
+        ...data,
+        tags: data.tags ? data.tags.split(",").map((t: string) => t.trim()).filter(Boolean) : [],
+      };
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/products/${params.productId}`,
-          data
+          payload
         );
       } else {
-        await axios.post(`/api/${params.storeId}/products`, data);
+        await axios.post(`/api/${params.storeId}/products`, payload);
       }
       router.refresh();
       router.push(`/${params.storeId}/products`);
@@ -199,25 +225,62 @@ const ProductForm = ({
                             ? `product photography of a ${categoryName}, professional studio lighting, 4k`
                             : undefined;
 
-                          console.log("Enhancing image with params:", params);
                           const response = await axios.post(
                             `/api/${params.storeId}/ai-enhance`,
-                            {
-                              imageUrl: url,
-                              prompt,
-                            }
+                            { imageUrl: url, prompt }
                           );
 
-                          // Add the new image to the list
                           field.onChange([
                             ...field.value,
                             { url: response.data.url },
                           ]);
-                          toast.success("Image enhanced successfully!");
+                          toast.success("Image enhanced with AI background!");
                         } catch (error: any) {
                           console.error("Enhance error:", error);
                           toast.error(
-                            `Failed: ${error.response?.data || error.message}`
+                            `Enhance failed: ${error.response?.data || error.message}`
+                          );
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      onRemoveBg={async (url) => {
+                        try {
+                          setLoading(true);
+                          const response = await axios.post(
+                            `/api/${params.storeId}/bg-remove`,
+                            { imageUrl: url }
+                          );
+                          field.onChange([
+                            ...field.value,
+                            { url: response.data.url },
+                          ]);
+                          toast.success("Background removed successfully!");
+                        } catch (error: any) {
+                          console.error("BG remove error:", error);
+                          toast.error(
+                            `BG removal failed: ${error.response?.data || error.message}`
+                          );
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                      on3DConvert={async (url) => {
+                        try {
+                          setLoading(true);
+                          const response = await axios.post(
+                            `/api/${params.storeId}/ai-3d`,
+                            { imageUrl: url }
+                          );
+                          field.onChange([
+                            ...field.value,
+                            { url: response.data.url },
+                          ]);
+                          toast.success("3D render generated successfully!");
+                        } catch (error: any) {
+                          console.error("3D convert error:", error);
+                          toast.error(
+                            `3D conversion failed: ${error.response?.data || error.message}`
                           );
                         } finally {
                           setLoading(false);
@@ -225,6 +288,12 @@ const ProductForm = ({
                       }}
                     />
                   </FormControl>
+                  <FormDescription className="flex gap-4 text-xs text-muted-foreground mt-2">
+                    <span>✂️ Remove BG</span>
+                    <span>📦 Convert to 3D</span>
+                    <span>🪄 AI Enhance (replace BG)</span>
+                    <span>🗑️ Delete</span>
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               );
@@ -266,6 +335,21 @@ const ProductForm = ({
               }}
             />
             <FormField
+              name="compareAtPrice"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Compare at Price:</FormLabel>
+                    <FormControl>
+                      <Input disabled={loading} placeholder="1299 (original price for discount display)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
               name="inventory"
               control={form.control}
               render={({ field }) => {
@@ -279,6 +363,36 @@ const ProductForm = ({
                         placeholder="0"
                         {...field}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="sku"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>SKU:</FormLabel>
+                    <FormControl>
+                      <Input disabled={loading} placeholder="PROD-001" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              name="tags"
+              control={form.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Tags:</FormLabel>
+                    <FormControl>
+                      <Input disabled={loading} placeholder="modern, wooden, bestseller (comma separated)" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -411,6 +525,87 @@ const ProductForm = ({
               }}
             />
           </div>
+          {/* Description - full width */}
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Description:</FormLabel>
+                  <FormControl>
+                    <textarea
+                      disabled={loading}
+                      placeholder="Product description..."
+                      className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            name="measurements"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Measurements:</FormLabel>
+                  <FormControl>
+                    <textarea
+                      disabled={loading}
+                      placeholder="Product measurements..."
+                      className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            name="materialsAndCare"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Materials & Care:</FormLabel>
+                  <FormControl>
+                    <textarea
+                      disabled={loading}
+                      placeholder="Materials and care instructions..."
+                      className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            name="assembly"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Assembly:</FormLabel>
+                  <FormControl>
+                    <textarea
+                      disabled={loading}
+                      placeholder="Assembly instructions or notes..."
+                      className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
           <Button disabled={loading} type="submit" className="ml-auto">
             {action}
           </Button>

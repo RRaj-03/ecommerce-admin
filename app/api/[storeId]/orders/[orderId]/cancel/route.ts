@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 const corsHeader = {
   "Access-Control-Allow-Origin": "*",

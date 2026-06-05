@@ -1,14 +1,14 @@
 import prismadb from "@/lib/prismadb";
 import React from "react";
 import FilterItemForm from "../components/filterItemForm";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 
 const FilterItemPage = async ({
   params,
 }: {
   params: { filterItemId: string };
 }) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   const filterItem = await prismadb.filterItem.findUnique({
     where: {
       id: params.filterItemId,

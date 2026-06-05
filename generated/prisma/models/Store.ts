@@ -213,6 +213,8 @@ export type StoreWhereInput = {
   filterItems?: Prisma.FilterItemListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   images?: Prisma.ImageListRelationFilter
+  theme?: Prisma.XOR<Prisma.StoreThemeNullableScalarRelationFilter, Prisma.StoreThemeWhereInput> | null
+  paymentConfig?: Prisma.XOR<Prisma.PaymentConfigNullableScalarRelationFilter, Prisma.PaymentConfigWhereInput> | null
 }
 
 export type StoreOrderByWithRelationInput = {
@@ -231,6 +233,8 @@ export type StoreOrderByWithRelationInput = {
   filterItems?: Prisma.FilterItemOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   images?: Prisma.ImageOrderByRelationAggregateInput
+  theme?: Prisma.StoreThemeOrderByWithRelationInput
+  paymentConfig?: Prisma.PaymentConfigOrderByWithRelationInput
 }
 
 export type StoreWhereUniqueInput = Prisma.AtLeast<{
@@ -252,6 +256,8 @@ export type StoreWhereUniqueInput = Prisma.AtLeast<{
   filterItems?: Prisma.FilterItemListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   images?: Prisma.ImageListRelationFilter
+  theme?: Prisma.XOR<Prisma.StoreThemeNullableScalarRelationFilter, Prisma.StoreThemeWhereInput> | null
+  paymentConfig?: Prisma.XOR<Prisma.PaymentConfigNullableScalarRelationFilter, Prisma.PaymentConfigWhereInput> | null
 }, "id">
 
 export type StoreOrderByWithAggregationInput = {
@@ -298,6 +304,8 @@ export type StoreCreateInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateInput = {
@@ -316,6 +324,8 @@ export type StoreUncheckedCreateInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUpdateInput = {
@@ -334,6 +344,8 @@ export type StoreUpdateInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateInput = {
@@ -352,6 +364,8 @@ export type StoreUncheckedUpdateInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateManyInput = {
@@ -430,16 +444,32 @@ export type StoreNullableScalarRelationFilter = {
   isNot?: Prisma.StoreWhereInput | null
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type StoreCreateNestedOneWithoutThemeInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutThemeInput, Prisma.StoreUncheckedCreateWithoutThemeInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutThemeInput
+  connect?: Prisma.StoreWhereUniqueInput
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type StoreUpdateOneRequiredWithoutThemeNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutThemeInput, Prisma.StoreUncheckedCreateWithoutThemeInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutThemeInput
+  upsert?: Prisma.StoreUpsertWithoutThemeInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutThemeInput, Prisma.StoreUpdateWithoutThemeInput>, Prisma.StoreUncheckedUpdateWithoutThemeInput>
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type StoreCreateNestedOneWithoutPaymentConfigInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutPaymentConfigInput, Prisma.StoreUncheckedCreateWithoutPaymentConfigInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutPaymentConfigInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutPaymentConfigNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutPaymentConfigInput, Prisma.StoreUncheckedCreateWithoutPaymentConfigInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutPaymentConfigInput
+  upsert?: Prisma.StoreUpsertWithoutPaymentConfigInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutPaymentConfigInput, Prisma.StoreUpdateWithoutPaymentConfigInput>, Prisma.StoreUncheckedUpdateWithoutPaymentConfigInput>
 }
 
 export type StoreCreateNestedOneWithoutBillboardsInput = {
@@ -542,6 +572,190 @@ export type StoreUpdateOneRequiredWithoutOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutOrdersInput, Prisma.StoreUpdateWithoutOrdersInput>, Prisma.StoreUncheckedUpdateWithoutOrdersInput>
 }
 
+export type StoreCreateWithoutThemeInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutThemeInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutThemeInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutThemeInput, Prisma.StoreUncheckedCreateWithoutThemeInput>
+}
+
+export type StoreUpsertWithoutThemeInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutThemeInput, Prisma.StoreUncheckedUpdateWithoutThemeInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutThemeInput, Prisma.StoreUncheckedCreateWithoutThemeInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutThemeInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutThemeInput, Prisma.StoreUncheckedUpdateWithoutThemeInput>
+}
+
+export type StoreUpdateWithoutThemeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutThemeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreCreateWithoutPaymentConfigInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutPaymentConfigInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutPaymentConfigInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutPaymentConfigInput, Prisma.StoreUncheckedCreateWithoutPaymentConfigInput>
+}
+
+export type StoreUpsertWithoutPaymentConfigInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutPaymentConfigInput, Prisma.StoreUncheckedUpdateWithoutPaymentConfigInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutPaymentConfigInput, Prisma.StoreUncheckedCreateWithoutPaymentConfigInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutPaymentConfigInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutPaymentConfigInput, Prisma.StoreUncheckedUpdateWithoutPaymentConfigInput>
+}
+
+export type StoreUpdateWithoutPaymentConfigInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutPaymentConfigInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+}
+
 export type StoreCreateWithoutBillboardsInput = {
   id?: string
   name: string
@@ -557,6 +771,8 @@ export type StoreCreateWithoutBillboardsInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutBillboardsInput = {
@@ -574,6 +790,8 @@ export type StoreUncheckedCreateWithoutBillboardsInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutBillboardsInput = {
@@ -607,6 +825,8 @@ export type StoreUpdateWithoutBillboardsInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutBillboardsInput = {
@@ -624,6 +844,8 @@ export type StoreUncheckedUpdateWithoutBillboardsInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutCategoriesInput = {
@@ -641,6 +863,8 @@ export type StoreCreateWithoutCategoriesInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutCategoriesInput = {
@@ -658,6 +882,8 @@ export type StoreUncheckedCreateWithoutCategoriesInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutCategoriesInput = {
@@ -691,6 +917,8 @@ export type StoreUpdateWithoutCategoriesInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutCategoriesInput = {
@@ -708,6 +936,8 @@ export type StoreUncheckedUpdateWithoutCategoriesInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutFilterItemsInput = {
@@ -725,6 +955,8 @@ export type StoreCreateWithoutFilterItemsInput = {
   filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutFilterItemsInput = {
@@ -742,6 +974,8 @@ export type StoreUncheckedCreateWithoutFilterItemsInput = {
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutFilterItemsInput = {
@@ -775,6 +1009,8 @@ export type StoreUpdateWithoutFilterItemsInput = {
   filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutFilterItemsInput = {
@@ -792,6 +1028,8 @@ export type StoreUncheckedUpdateWithoutFilterItemsInput = {
   filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutFiltersInput = {
@@ -809,6 +1047,8 @@ export type StoreCreateWithoutFiltersInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutFiltersInput = {
@@ -826,6 +1066,8 @@ export type StoreUncheckedCreateWithoutFiltersInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutFiltersInput = {
@@ -859,6 +1101,8 @@ export type StoreUpdateWithoutFiltersInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutFiltersInput = {
@@ -876,6 +1120,8 @@ export type StoreUncheckedUpdateWithoutFiltersInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutProductsInput = {
@@ -893,6 +1139,8 @@ export type StoreCreateWithoutProductsInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutProductsInput = {
@@ -910,6 +1158,8 @@ export type StoreUncheckedCreateWithoutProductsInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutProductsInput = {
@@ -943,6 +1193,8 @@ export type StoreUpdateWithoutProductsInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutProductsInput = {
@@ -960,6 +1212,8 @@ export type StoreUncheckedUpdateWithoutProductsInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutImagesInput = {
@@ -977,6 +1231,8 @@ export type StoreCreateWithoutImagesInput = {
   filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutImagesInput = {
@@ -994,6 +1250,8 @@ export type StoreUncheckedCreateWithoutImagesInput = {
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutImagesInput = {
@@ -1027,6 +1285,8 @@ export type StoreUpdateWithoutImagesInput = {
   filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutImagesInput = {
@@ -1044,6 +1304,8 @@ export type StoreUncheckedUpdateWithoutImagesInput = {
   filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreCreateWithoutOrdersInput = {
@@ -1061,6 +1323,8 @@ export type StoreCreateWithoutOrdersInput = {
   filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
 export type StoreUncheckedCreateWithoutOrdersInput = {
@@ -1078,6 +1342,8 @@ export type StoreUncheckedCreateWithoutOrdersInput = {
   filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
 export type StoreCreateOrConnectWithoutOrdersInput = {
@@ -1111,6 +1377,8 @@ export type StoreUpdateWithoutOrdersInput = {
   filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
 export type StoreUncheckedUpdateWithoutOrdersInput = {
@@ -1128,6 +1396,8 @@ export type StoreUncheckedUpdateWithoutOrdersInput = {
   filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
 
@@ -1231,6 +1501,8 @@ export type StoreSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   filterItems?: boolean | Prisma.Store$filterItemsArgs<ExtArgs>
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   images?: boolean | Prisma.Store$imagesArgs<ExtArgs>
+  theme?: boolean | Prisma.Store$themeArgs<ExtArgs>
+  paymentConfig?: boolean | Prisma.Store$paymentConfigArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["store"]>
 
@@ -1276,6 +1548,8 @@ export type StoreInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   filterItems?: boolean | Prisma.Store$filterItemsArgs<ExtArgs>
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   images?: boolean | Prisma.Store$imagesArgs<ExtArgs>
+  theme?: boolean | Prisma.Store$themeArgs<ExtArgs>
+  paymentConfig?: boolean | Prisma.Store$paymentConfigArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StoreIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1291,6 +1565,8 @@ export type $StorePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     filterItems: Prisma.$FilterItemPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
     images: Prisma.$ImagePayload<ExtArgs>[]
+    theme: Prisma.$StoreThemePayload<ExtArgs> | null
+    paymentConfig: Prisma.$PaymentConfigPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1702,6 +1978,8 @@ export interface Prisma__StoreClient<T, Null = never, ExtArgs extends runtime.Ty
   filterItems<T extends Prisma.Store$filterItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$filterItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FilterItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Store$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   images<T extends Prisma.Store$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  theme<T extends Prisma.Store$themeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$themeArgs<ExtArgs>>): Prisma.Prisma__StoreThemeClient<runtime.Types.Result.GetResult<Prisma.$StoreThemePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  paymentConfig<T extends Prisma.Store$paymentConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$paymentConfigArgs<ExtArgs>>): Prisma.Prisma__PaymentConfigClient<runtime.Types.Result.GetResult<Prisma.$PaymentConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2292,6 +2570,44 @@ export type Store$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
+}
+
+/**
+ * Store.theme
+ */
+export type Store$themeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreTheme
+   */
+  select?: Prisma.StoreThemeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StoreTheme
+   */
+  omit?: Prisma.StoreThemeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreThemeInclude<ExtArgs> | null
+  where?: Prisma.StoreThemeWhereInput
+}
+
+/**
+ * Store.paymentConfig
+ */
+export type Store$paymentConfigArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PaymentConfig
+   */
+  select?: Prisma.PaymentConfigSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PaymentConfig
+   */
+  omit?: Prisma.PaymentConfigOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentConfigInclude<ExtArgs> | null
+  where?: Prisma.PaymentConfigWhereInput
 }
 
 /**
