@@ -19,6 +19,7 @@ export async function GET(
   }: {
     params: {
       orderId: string;
+      storeId: string;
     };
   }
 ) {
