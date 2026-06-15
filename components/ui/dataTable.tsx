@@ -24,6 +24,7 @@ import { Button } from "./button";
 import React, { useState } from "react";
 import { Input } from "./input";
 import { Switch } from "./switch";
+import { Filter } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,6 +45,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
+  const [showFilters, setShowFilters] = useState(false);
 
   const table = useReactTable({
     data,
@@ -53,6 +55,7 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
+    getRowCanExpand: () => true,
     onExpandedChange: setExpanded,
     state: {
       columnFilters,
@@ -62,14 +65,20 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder={"Search"}
-          value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(searchKey)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="flex items-center gap-x-2">
+          <Input
+            placeholder={"Search"}
+            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+          <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
+            <Filter className="w-4 h-4 mr-2" />
+            Advanced Filters
+          </Button>
+        </div>
         {setIsPaid && (
           <div className="flex items-center gap-x-2">
             <span className="text-slate-500 font-medium">Paid</span>
@@ -82,6 +91,24 @@ export function DataTable<TData, TValue>({
           </div>
         )}
       </div>
+      
+      {showFilters && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
+          {table
+            .getAllColumns()
+            .filter((column) => column.getCanFilter() && column.id !== searchKey && column.id !== 'actions' && column.id !== 'expander')
+            .map((column) => (
+              <Input
+                key={column.id}
+                placeholder={`Filter ${column.id}...`}
+                value={(column.getFilterValue() as string) ?? ""}
+                onChange={(event) => column.setFilterValue(event.target.value)}
+                className="max-w-sm text-sm"
+              />
+            ))}
+        </div>
+      )}
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

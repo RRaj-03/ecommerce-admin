@@ -25,7 +25,7 @@ const OrdersClient = ({ data: initialData }: { data: OrderColumn[] }) => {
       return item.isPaid === isPaid;
     });
     setData(newData);
-  }, [isPaid]);
+  }, [initialData, isPaid]);
   return (
     <>
       <Heading
