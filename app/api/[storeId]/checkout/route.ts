@@ -239,11 +239,17 @@ export async function POST(
         env
       );
 
+      const storeUrl =
+        request.headers.get("origin") ||
+        process.env.FORNTEND_STORE_URL ||
+        process.env.FRONTEND_STORE_URL ||
+        "http://localhost:3002";
+
       const phonePeRequest = StandardCheckoutPayRequest.builder()
         .merchantOrderId(result.order.id)
         .amount(Math.round(result.totalAmount * 100)) // amount in paisa
         .redirectUrl(
-          `${process.env.FORNTEND_STORE_URL}/cart?phonepe_status=1&orderId=${result.order.id}`
+          `${storeUrl}/cart?phonepe_status=1&orderId=${result.order.id}`
         )
         .build();
 
