@@ -67,14 +67,17 @@ interface DataTableProps<TData, TValue> {
 
 const advancedFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   if (!filterValue) return true;
-  
-  if (typeof filterValue === 'string') {
+
+  if (typeof filterValue === "string") {
     const rowValue = row.getValue(columnId);
     if (rowValue === null || rowValue === undefined) return false;
     return String(rowValue).toLowerCase().includes(filterValue.toLowerCase());
   }
 
-  const { operator, value } = filterValue as { operator: string; value: string };
+  const { operator, value } = filterValue as {
+    operator: string;
+    value: string;
+  };
   if (value === undefined || value === null || value === "") return true;
 
   const rowValue = row.getValue(columnId);
@@ -95,19 +98,45 @@ const advancedFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
     case "endsWith":
       return rowValueStr.endsWith(filterValueStr);
     case ">":
-      return !isNaN(rowValueNum) && !isNaN(filterValueNum) && rowValueNum > filterValueNum;
+      return (
+        !isNaN(rowValueNum) &&
+        !isNaN(filterValueNum) &&
+        rowValueNum > filterValueNum
+      );
     case "<":
-      return !isNaN(rowValueNum) && !isNaN(filterValueNum) && rowValueNum < filterValueNum;
+      return (
+        !isNaN(rowValueNum) &&
+        !isNaN(filterValueNum) &&
+        rowValueNum < filterValueNum
+      );
     case ">=":
-      return !isNaN(rowValueNum) && !isNaN(filterValueNum) && rowValueNum >= filterValueNum;
+      return (
+        !isNaN(rowValueNum) &&
+        !isNaN(filterValueNum) &&
+        rowValueNum >= filterValueNum
+      );
     case "<=":
-      return !isNaN(rowValueNum) && !isNaN(filterValueNum) && rowValueNum <= filterValueNum;
+      return (
+        !isNaN(rowValueNum) &&
+        !isNaN(filterValueNum) &&
+        rowValueNum <= filterValueNum
+      );
     case "=":
-      return !isNaN(rowValueNum) && !isNaN(filterValueNum) && rowValueNum === filterValueNum;
+      return (
+        !isNaN(rowValueNum) &&
+        !isNaN(filterValueNum) &&
+        rowValueNum === filterValueNum
+      );
     case "in":
-      return filterValueStr.split(",").map((v) => v.trim()).includes(rowValueStr);
+      return filterValueStr
+        .split(",")
+        .map((v) => v.trim())
+        .includes(rowValueStr);
     case "notIn":
-      return !filterValueStr.split(",").map((v) => v.trim()).includes(rowValueStr);
+      return !filterValueStr
+        .split(",")
+        .map((v) => v.trim())
+        .includes(rowValueStr);
     case "not":
       return rowValueStr !== filterValueStr;
     default:
@@ -116,8 +145,11 @@ const advancedFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
 };
 
 function ColumnFilterForm({ column }: { column: Column<any, unknown> }) {
-  const filterValue = column.getFilterValue() as { operator: string; value: string } | undefined | string;
-  
+  const filterValue = column.getFilterValue() as
+    | { operator: string; value: string }
+    | undefined
+    | string;
+
   let operator = "contains";
   let value = "";
 
@@ -131,9 +163,11 @@ function ColumnFilterForm({ column }: { column: Column<any, unknown> }) {
   return (
     <div className="space-y-4 p-2">
       <div className="space-y-2">
-        <label className="text-xs font-medium text-muted-foreground">Operator</label>
-        <Select 
-          value={operator} 
+        <label className="text-xs font-medium text-muted-foreground">
+          Operator
+        </label>
+        <Select
+          value={operator}
           onValueChange={(op) => column.setFilterValue({ operator: op, value })}
         >
           <SelectTrigger className="h-8">
@@ -156,17 +190,21 @@ function ColumnFilterForm({ column }: { column: Column<any, unknown> }) {
         </Select>
       </div>
       <div className="space-y-2">
-        <label className="text-xs font-medium text-muted-foreground">Value</label>
-        <Input 
+        <label className="text-xs font-medium text-muted-foreground">
+          Value
+        </label>
+        <Input
           className="h-8"
-          placeholder="Filter value..." 
+          placeholder="Filter value..."
           value={value}
-          onChange={(e) => column.setFilterValue({ operator, value: e.target.value })}
+          onChange={(e) =>
+            column.setFilterValue({ operator, value: e.target.value })
+          }
         />
       </div>
-      <Button 
-        variant="ghost" 
-        size="sm" 
+      <Button
+        variant="ghost"
+        size="sm"
         className="w-full text-xs"
         onClick={() => column.setFilterValue(undefined)}
       >
@@ -177,16 +215,32 @@ function ColumnFilterForm({ column }: { column: Column<any, unknown> }) {
 }
 
 function ColumnHeaderMenu({ column }: { column: Column<any, unknown> }) {
-  const canFilter = column.getCanFilter() && column.id !== "actions" && column.id !== "select" && column.id !== "expander";
-  const canSort = column.getCanSort() && column.id !== "actions" && column.id !== "select" && column.id !== "expander";
-  const canPin = column.getCanPin() && column.id !== "actions" && column.id !== "select" && column.id !== "expander";
+  const canFilter =
+    column.getCanFilter() &&
+    column.id !== "actions" &&
+    column.id !== "select" &&
+    column.id !== "expander";
+  const canSort =
+    column.getCanSort() &&
+    column.id !== "actions" &&
+    column.id !== "select" &&
+    column.id !== "expander";
+  const canPin =
+    column.getCanPin() &&
+    column.id !== "actions" &&
+    column.id !== "select" &&
+    column.id !== "expander";
 
   if (!canFilter && !canSort && !canPin && !column.getCanHide()) return null;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 ml-1 data-[state=open]:bg-accent">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0 ml-1 data-[state=open]:bg-accent"
+        >
           <MoreHorizontal className="h-3 w-3" />
         </Button>
       </DropdownMenuTrigger>
@@ -269,7 +323,7 @@ export function DataTable<TData, TValue>({
         ...col,
         filterFn: col.filterFn || advancedFilterFn,
       })),
-    [columns]
+    [columns],
   );
 
   const table = useReactTable({
@@ -334,7 +388,7 @@ export function DataTable<TData, TValue>({
                 .filter(
                   (column) =>
                     typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
+                    column.getCanHide(),
                 )
                 .map((column) => {
                   return (
@@ -355,7 +409,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="rounded-md border bg-white">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -367,18 +421,29 @@ export function DataTable<TData, TValue>({
                       key={header.id}
                       style={{
                         position: isPinned ? "sticky" : "static",
-                        left: isPinned === "left" ? `${header.column.getStart("left")}px` : undefined,
-                        right: isPinned === "right" ? `${header.column.getAfter("right")}px` : undefined,
+                        left:
+                          isPinned === "left"
+                            ? `${header.column.getStart("left")}px`
+                            : undefined,
+                        right:
+                          isPinned === "right"
+                            ? `${header.column.getAfter("right")}px`
+                            : undefined,
                         zIndex: isPinned ? 10 : 0,
                         backgroundColor: isPinned ? "white" : "inherit",
-                        boxShadow: isPinned === "left" ? "2px 0 4px -2px rgba(0,0,0,0.1)" : isPinned === "right" ? "-2px 0 4px -2px rgba(0,0,0,0.1)" : undefined,
+                        boxShadow:
+                          isPinned === "left"
+                            ? "2px 0 4px -2px rgba(0,0,0,0.1)"
+                            : isPinned === "right"
+                              ? "-2px 0 4px -2px rgba(0,0,0,0.1)"
+                              : undefined,
                       }}
                     >
                       {header.isPlaceholder ? null : (
                         <div className="flex items-center">
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                           <ColumnHeaderMenu column={header.column} />
                         </div>
@@ -401,16 +466,27 @@ export function DataTable<TData, TValue>({
                           key={cell.id}
                           style={{
                             position: isPinned ? "sticky" : "static",
-                            left: isPinned === "left" ? `${cell.column.getStart("left")}px` : undefined,
-                            right: isPinned === "right" ? `${cell.column.getAfter("right")}px` : undefined,
+                            left:
+                              isPinned === "left"
+                                ? `${cell.column.getStart("left")}px`
+                                : undefined,
+                            right:
+                              isPinned === "right"
+                                ? `${cell.column.getAfter("right")}px`
+                                : undefined,
                             zIndex: isPinned ? 10 : 0,
                             backgroundColor: isPinned ? "white" : "inherit",
-                            boxShadow: isPinned === "left" ? "2px 0 4px -2px rgba(0,0,0,0.1)" : isPinned === "right" ? "-2px 0 4px -2px rgba(0,0,0,0.1)" : undefined,
+                            boxShadow:
+                              isPinned === "left"
+                                ? "2px 0 4px -2px rgba(0,0,0,0.1)"
+                                : isPinned === "right"
+                                  ? "-2px 0 4px -2px rgba(0,0,0,0.1)"
+                                  : undefined,
                           }}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       );
