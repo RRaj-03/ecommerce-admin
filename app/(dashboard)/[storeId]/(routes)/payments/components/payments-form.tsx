@@ -123,26 +123,26 @@ const PaymentsForm = ({ storeId, initialConfig }: PaymentsFormProps) => {
           {config.phonepeEnabled && (
             <div className="space-y-3 pt-2">
               <div className="space-y-1">
-                <Label className="text-xs">Merchant ID</Label>
+                <Label className="text-xs">Client ID</Label>
                 <Input
                   value={config.phonepeMerchantId}
                   onChange={(e) => setConfig(prev => ({ ...prev, phonepeMerchantId: e.target.value }))}
-                  placeholder="M22XXXXXXXXX"
+                  placeholder="Client ID from PhonePe dashboard"
                   className="font-mono text-xs"
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Salt Key</Label>
+                <Label className="text-xs">Client Secret</Label>
                 <Input
                   type="password"
                   value={config.phonepeSaltKey}
                   onChange={(e) => setConfig(prev => ({ ...prev, phonepeSaltKey: e.target.value }))}
-                  placeholder="Salt key from PhonePe dashboard"
+                  placeholder="Client Secret from PhonePe dashboard"
                   className="font-mono text-xs"
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Salt Index</Label>
+                <Label className="text-xs">Client Version</Label>
                 <Input
                   type="number"
                   value={config.phonepeSaltIndex}

@@ -212,13 +212,45 @@ export async function POST(
       );
     }
 
-    // ── PhonePe (placeholder — add SDK integration here) ────────────────────
+    // ── PhonePe ──────────────────────────────────────────────────────────────
     if (paymentMethod === "phonepe") {
-      // TODO: Integrate PhonePe SDK
-      // For now return a 501 with a helpful message
-      return new NextResponse(
-        "PhonePe integration coming soon. Please use Stripe or COD.",
-        { status: 501, headers: corsHeader }
+      const { StandardCheckoutClient, Env, StandardCheckoutPayRequest } =
+        await import("@phonepe-pg/pg-sdk-node");
+
+      const clientId = paymentConfig!.phonepeMerchantId; // stores Client ID
+      const clientSecret = paymentConfig!.phonepeSaltKey; // stores Client Secret
+      const clientVersion = paymentConfig!.phonepeSaltIndex; // stores client version
+
+      if (!clientId || !clientSecret) {
+        return new NextResponse("PhonePe credentials not configured", {
+          status: 500,
+          headers: corsHeader,
+        });
+      }
+
+      const env =
+        process.env.PHONEPE_ENV === "PRODUCTION"
+          ? Env.PRODUCTION
+          : Env.SANDBOX;
+      const client = StandardCheckoutClient.getInstance(
+        clientId,
+        clientSecret,
+        clientVersion,
+        env
+      );
+
+      const phonePeRequest = StandardCheckoutPayRequest.builder()
+        .merchantOrderId(result.order.id)
+        .amount(Math.round(result.totalAmount * 100)) // amount in paisa
+        .redirectUrl(
+          `${process.env.FORNTEND_STORE_URL}/cart?phonepe_status=1&orderId=${result.order.id}`
+        )
+        .build();
+
+      const phonePeResponse = await client.pay(phonePeRequest);
+      return NextResponse.json(
+        { url: phonePeResponse.redirectUrl },
+        { headers: corsHeader }
       );
     }
 

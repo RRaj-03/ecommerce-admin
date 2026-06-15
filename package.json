@@ -18,6 +18,7 @@
     "@clerk/nextjs": "^4.23.2",
     "@hookform/resolvers": "^3.1.1",
     "@huggingface/inference": "^4.13.5",
+    "@phonepe-pg/pg-sdk-node": "^2.0.6",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@radix-ui/react-checkbox": "^1.0.4",
