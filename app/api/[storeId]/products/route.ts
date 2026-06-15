@@ -1,6 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { requirePermission } from "@/lib/rbac";
 
 export async function POST(
   req: Request,
@@ -10,7 +11,7 @@ export async function POST(
     params: {
       storeId: string;
     };
-  }
+  },
 ) {
   try {
     const { userId } = await auth();
@@ -59,8 +60,14 @@ export async function POST(
     if (!params.storeId) {
       return new NextResponse("StoreId is Required", { status: 400 });
     }
-    const check = await requirePermission(userId, params.storeId, "products", "create");
-    if (!check.allowed) return new NextResponse(check.message, { status: check.status });
+    const check = await requirePermission(
+      userId,
+      params.storeId,
+      "products",
+      "create",
+    );
+    if (!check.allowed)
+      return new NextResponse(check.message, { status: check.status });
 
     const filterCreate = filterItemIds.map((id: string) => ({
       filterItem: {
@@ -110,7 +117,7 @@ export async function GET(
     params: {
       storeId: string;
     };
-  }
+  },
 ) {
   try {
     const { searchParams } = new URL(req.url);
@@ -154,9 +161,7 @@ export async function GET(
         categoryId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
-        AND: [
-          ...filterConditions,
-        ],
+        AND: [...filterConditions],
       },
       include: {
         images: true,
