@@ -48,6 +48,11 @@ export type PaymentConfig = Prisma.PaymentConfigModel
  */
 export type Billboard = Prisma.BillboardModel
 /**
+ * Model Page
+ * 
+ */
+export type Page = Prisma.PageModel
+/**
  * Model Category
  * 
  */

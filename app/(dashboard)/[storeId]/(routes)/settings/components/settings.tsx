@@ -38,6 +38,7 @@ const FormSchema = z.object({
   phoneNumber: z.string().min(1),
   Address: z.string().min(1),
   images: z.object({ url: z.string() }).array(),
+  logoUrl: z.string().optional().nullable(),
 });
 type SettingsFormValues = z.infer<typeof FormSchema>;
 const SettingsForm = ({ initialData }: SettingsFormProps) => {
@@ -59,6 +60,7 @@ const SettingsForm = ({ initialData }: SettingsFormProps) => {
           emailAddress: "",
           phoneNumber: "",
           Address: "",
+          logoUrl: "",
         },
   });
   const [open, setOpen] = useState(false);
@@ -135,6 +137,26 @@ const SettingsForm = ({ initialData }: SettingsFormProps) => {
                           ...field.value.filter((image) => image.url !== url),
                         ])
                       }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            name="logoUrl"
+            control={form.control}
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel>Store Logo (also used for favicon):</FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value ? [field.value] : []}
+                      disabled={loading}
+                      onChange={(url) => field.onChange(url)}
+                      onRemove={() => field.onChange("")}
                     />
                   </FormControl>
                   <FormMessage />

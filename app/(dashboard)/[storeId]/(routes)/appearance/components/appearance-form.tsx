@@ -417,9 +417,8 @@ const AppearanceForm = ({ storeId, initialTheme }: AppearanceFormProps) => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="default">Default — Left-aligned</SelectItem>
-                    <SelectItem value="centered">Centered — Logo center</SelectItem>
-                    <SelectItem value="minimal">Minimal — Clean & compact</SelectItem>
+                    <SelectItem value="dropdown">Dropdown — Categories in a dropdown menu</SelectItem>
+                    <SelectItem value="inline">Inline — Categories as horizontal links</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

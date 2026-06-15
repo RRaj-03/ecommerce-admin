@@ -57,6 +57,7 @@ export const ModelName = {
   StoreTheme: 'StoreTheme',
   PaymentConfig: 'PaymentConfig',
   Billboard: 'Billboard',
+  Page: 'Page',
   Category: 'Category',
   FilterItem: 'FilterItem',
   Filter: 'Filter',
@@ -121,6 +122,7 @@ export const StoreScalarFieldEnum = {
   emailAddress: 'emailAddress',
   phoneNumber: 'phoneNumber',
   Address: 'Address',
+  logoUrl: 'logoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -196,6 +198,20 @@ export const BillboardScalarFieldEnum = {
 } as const
 
 export type BillboardScalarFieldEnum = (typeof BillboardScalarFieldEnum)[keyof typeof BillboardScalarFieldEnum]
+
+
+export const PageScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  title: 'title',
+  slug: 'slug',
+  content: 'content',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {

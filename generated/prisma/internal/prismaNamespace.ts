@@ -390,6 +390,7 @@ export const ModelName = {
   StoreTheme: 'StoreTheme',
   PaymentConfig: 'PaymentConfig',
   Billboard: 'Billboard',
+  Page: 'Page',
   Category: 'Category',
   FilterItem: 'FilterItem',
   Filter: 'Filter',
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "adminUser" | "customer" | "store" | "storeTheme" | "paymentConfig" | "billboard" | "category" | "filterItem" | "filter" | "product" | "productOnFilterItem" | "image" | "order" | "orderStatusHistory" | "orderItem" | "customerAddress"
+    modelProps: "adminUser" | "customer" | "store" | "storeTheme" | "paymentConfig" | "billboard" | "page" | "category" | "filterItem" | "filter" | "product" | "productOnFilterItem" | "image" | "order" | "orderStatusHistory" | "orderItem" | "customerAddress"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -860,6 +861,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BillboardCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BillboardCountAggregateOutputType> | number
+        }
+      }
+    }
+    Page: {
+      payload: Prisma.$PagePayload<ExtArgs>
+      fields: Prisma.PageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        findFirst: {
+          args: Prisma.PageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        findMany: {
+          args: Prisma.PageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+        }
+        create: {
+          args: Prisma.PageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        createMany: {
+          args: Prisma.PageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+        }
+        delete: {
+          args: Prisma.PageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        update: {
+          args: Prisma.PageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        deleteMany: {
+          args: Prisma.PageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>[]
+        }
+        upsert: {
+          args: Prisma.PageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PagePayload>
+        }
+        aggregate: {
+          args: Prisma.PageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePage>
+        }
+        groupBy: {
+          args: Prisma.PageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PageCountAggregateOutputType> | number
         }
       }
     }
@@ -1678,6 +1753,7 @@ export const StoreScalarFieldEnum = {
   emailAddress: 'emailAddress',
   phoneNumber: 'phoneNumber',
   Address: 'Address',
+  logoUrl: 'logoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1753,6 +1829,20 @@ export const BillboardScalarFieldEnum = {
 } as const
 
 export type BillboardScalarFieldEnum = (typeof BillboardScalarFieldEnum)[keyof typeof BillboardScalarFieldEnum]
+
+
+export const PageScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  title: 'title',
+  slug: 'slug',
+  content: 'content',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -2116,6 +2206,7 @@ export type GlobalOmitConfig = {
   storeTheme?: Prisma.StoreThemeOmit
   paymentConfig?: Prisma.PaymentConfigOmit
   billboard?: Prisma.BillboardOmit
+  page?: Prisma.PageOmit
   category?: Prisma.CategoryOmit
   filterItem?: Prisma.FilterItemOmit
   filter?: Prisma.FilterOmit
