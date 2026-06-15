@@ -59,15 +59,8 @@ export async function POST(
     if (!params.storeId) {
       return new NextResponse("StoreId is Required", { status: 400 });
     }
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorized", { status: 403 });
-    }
+    const check = await requirePermission(userId, params.storeId, "products", "create");
+    if (!check.allowed) return new NextResponse(check.message, { status: check.status });
 
     const filterCreate = filterItemIds.map((id: string) => ({
       filterItem: {

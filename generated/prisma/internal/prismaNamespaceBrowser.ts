@@ -54,6 +54,10 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   Customer: 'Customer',
   Store: 'Store',
+  Role: 'Role',
+  Permission: 'Permission',
+  StoreMember: 'StoreMember',
+  StoreInvite: 'StoreInvite',
   StoreTheme: 'StoreTheme',
   PaymentConfig: 'PaymentConfig',
   Billboard: 'Billboard',
@@ -128,6 +132,55 @@ export const StoreScalarFieldEnum = {
 } as const
 
 export type StoreScalarFieldEnum = (typeof StoreScalarFieldEnum)[keyof typeof StoreScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  name: 'name',
+  description: 'description',
+  isSystem: 'isSystem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
+
+
+export const PermissionScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  resource: 'resource',
+  action: 'action'
+} as const
+
+export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
+
+
+export const StoreMemberScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  userId: 'userId',
+  roleId: 'roleId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StoreMemberScalarFieldEnum = (typeof StoreMemberScalarFieldEnum)[keyof typeof StoreMemberScalarFieldEnum]
+
+
+export const StoreInviteScalarFieldEnum = {
+  id: 'id',
+  storeId: 'storeId',
+  email: 'email',
+  roleId: 'roleId',
+  token: 'token',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StoreInviteScalarFieldEnum = (typeof StoreInviteScalarFieldEnum)[keyof typeof StoreInviteScalarFieldEnum]
 
 
 export const StoreThemeScalarFieldEnum = {

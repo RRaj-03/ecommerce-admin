@@ -55,6 +55,26 @@ export type Customer = Prisma.CustomerModel
  */
 export type Store = Prisma.StoreModel
 /**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model StoreMember
+ * 
+ */
+export type StoreMember = Prisma.StoreMemberModel
+/**
+ * Model StoreInvite
+ * 
+ */
+export type StoreInvite = Prisma.StoreInviteModel
+/**
  * Model StoreTheme
  * 
  */

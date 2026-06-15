@@ -8,12 +8,13 @@ datasource db {
 }
 
 model AdminUser {
-  id           String   @id @default(uuid())
-  email        String   @unique
+  id           String        @id @default(uuid())
+  email        String        @unique
   passwordHash String
   name         String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  memberships  StoreMember[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Customer {
@@ -50,11 +51,75 @@ model Store {
   orders        Order[]         @relation("StoreToOrder")
   images        Image[]
   pages         Page[]          @relation("StoreToPage")
+  roles         Role[]          @relation("StoreToRole")
+  members       StoreMember[]   @relation("StoreToMember")
+  invites       StoreInvite[]   @relation("StoreToInvite")
   logoUrl       String?
   theme         StoreTheme?
   paymentConfig PaymentConfig?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  storeId     String
+  store       Store        @relation("StoreToRole", fields: [storeId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  isSystem    Boolean      @default(false)
+  permissions Permission[]
+  members     StoreMember[]
+  invites     StoreInvite[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([storeId, name])
+  @@index([storeId])
+}
+
+model Permission {
+  id       String @id @default(uuid())
+  roleId   String
+  role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  resource String
+  action   String
+
+  @@unique([roleId, resource, action])
+  @@index([roleId])
+}
+
+model StoreMember {
+  id        String    @id @default(uuid())
+  storeId   String
+  store     Store     @relation("StoreToMember", fields: [storeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId    String
+  role      Role      @relation(fields: [roleId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([storeId, userId])
+  @@index([storeId])
+  @@index([userId])
+}
+
+model StoreInvite {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation("StoreToInvite", fields: [storeId], references: [id], onDelete: Cascade)
+  email     String
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id])
+  token     String   @unique @default(uuid())
+  status    String   @default("pending") // "pending", "accepted", "expired"
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([storeId, email])
+  @@index([storeId])
+  @@index([token])
 }
 
 model StoreTheme {
