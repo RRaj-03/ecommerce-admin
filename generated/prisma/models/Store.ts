@@ -222,6 +222,9 @@ export type StoreWhereInput = {
   orders?: Prisma.OrderListRelationFilter
   images?: Prisma.ImageListRelationFilter
   pages?: Prisma.PageListRelationFilter
+  roles?: Prisma.RoleListRelationFilter
+  members?: Prisma.StoreMemberListRelationFilter
+  invites?: Prisma.StoreInviteListRelationFilter
   theme?: Prisma.XOR<Prisma.StoreThemeNullableScalarRelationFilter, Prisma.StoreThemeWhereInput> | null
   paymentConfig?: Prisma.XOR<Prisma.PaymentConfigNullableScalarRelationFilter, Prisma.PaymentConfigWhereInput> | null
 }
@@ -244,6 +247,9 @@ export type StoreOrderByWithRelationInput = {
   orders?: Prisma.OrderOrderByRelationAggregateInput
   images?: Prisma.ImageOrderByRelationAggregateInput
   pages?: Prisma.PageOrderByRelationAggregateInput
+  roles?: Prisma.RoleOrderByRelationAggregateInput
+  members?: Prisma.StoreMemberOrderByRelationAggregateInput
+  invites?: Prisma.StoreInviteOrderByRelationAggregateInput
   theme?: Prisma.StoreThemeOrderByWithRelationInput
   paymentConfig?: Prisma.PaymentConfigOrderByWithRelationInput
 }
@@ -269,6 +275,9 @@ export type StoreWhereUniqueInput = Prisma.AtLeast<{
   orders?: Prisma.OrderListRelationFilter
   images?: Prisma.ImageListRelationFilter
   pages?: Prisma.PageListRelationFilter
+  roles?: Prisma.RoleListRelationFilter
+  members?: Prisma.StoreMemberListRelationFilter
+  invites?: Prisma.StoreInviteListRelationFilter
   theme?: Prisma.XOR<Prisma.StoreThemeNullableScalarRelationFilter, Prisma.StoreThemeWhereInput> | null
   paymentConfig?: Prisma.XOR<Prisma.PaymentConfigNullableScalarRelationFilter, Prisma.PaymentConfigWhereInput> | null
 }, "id">
@@ -321,6 +330,9 @@ export type StoreCreateInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -343,6 +355,9 @@ export type StoreUncheckedCreateInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -365,6 +380,9 @@ export type StoreUpdateInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -387,6 +405,9 @@ export type StoreUncheckedUpdateInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -471,6 +492,48 @@ export type StoreScalarRelationFilter = {
 export type StoreNullableScalarRelationFilter = {
   is?: Prisma.StoreWhereInput | null
   isNot?: Prisma.StoreWhereInput | null
+}
+
+export type StoreCreateNestedOneWithoutRolesInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutRolesInput, Prisma.StoreUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutRolesInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutRolesNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutRolesInput, Prisma.StoreUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutRolesInput
+  upsert?: Prisma.StoreUpsertWithoutRolesInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutRolesInput, Prisma.StoreUpdateWithoutRolesInput>, Prisma.StoreUncheckedUpdateWithoutRolesInput>
+}
+
+export type StoreCreateNestedOneWithoutMembersInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutMembersInput, Prisma.StoreUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutMembersInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutMembersInput, Prisma.StoreUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutMembersInput
+  upsert?: Prisma.StoreUpsertWithoutMembersInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutMembersInput, Prisma.StoreUpdateWithoutMembersInput>, Prisma.StoreUncheckedUpdateWithoutMembersInput>
+}
+
+export type StoreCreateNestedOneWithoutInvitesInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutInvitesInput, Prisma.StoreUncheckedCreateWithoutInvitesInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutInvitesInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutInvitesInput, Prisma.StoreUncheckedCreateWithoutInvitesInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutInvitesInput
+  upsert?: Prisma.StoreUpsertWithoutInvitesInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutInvitesInput, Prisma.StoreUpdateWithoutInvitesInput>, Prisma.StoreUncheckedUpdateWithoutInvitesInput>
 }
 
 export type StoreCreateNestedOneWithoutThemeInput = {
@@ -615,6 +678,342 @@ export type StoreUpdateOneRequiredWithoutOrdersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutOrdersInput, Prisma.StoreUpdateWithoutOrdersInput>, Prisma.StoreUncheckedUpdateWithoutOrdersInput>
 }
 
+export type StoreCreateWithoutRolesInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutRolesInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutRolesInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutRolesInput, Prisma.StoreUncheckedCreateWithoutRolesInput>
+}
+
+export type StoreUpsertWithoutRolesInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutRolesInput, Prisma.StoreUncheckedUpdateWithoutRolesInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutRolesInput, Prisma.StoreUncheckedCreateWithoutRolesInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutRolesInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutRolesInput, Prisma.StoreUncheckedUpdateWithoutRolesInput>
+}
+
+export type StoreUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutMembersInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutMembersInput, Prisma.StoreUncheckedCreateWithoutMembersInput>
+}
+
+export type StoreUpsertWithoutMembersInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutMembersInput, Prisma.StoreUncheckedUpdateWithoutMembersInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutMembersInput, Prisma.StoreUncheckedCreateWithoutMembersInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutMembersInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutMembersInput, Prisma.StoreUncheckedUpdateWithoutMembersInput>
+}
+
+export type StoreUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreCreateWithoutInvitesInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutInvitesInput = {
+  id?: string
+  name: string
+  userId: string
+  emailAddress?: string | null
+  phoneNumber?: string | null
+  Address?: string | null
+  logoUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutStoreInput
+  billboards?: Prisma.BillboardUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  filters?: Prisma.FilterUncheckedCreateNestedManyWithoutStoreInput
+  filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutInvitesInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutInvitesInput, Prisma.StoreUncheckedCreateWithoutInvitesInput>
+}
+
+export type StoreUpsertWithoutInvitesInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutInvitesInput, Prisma.StoreUncheckedUpdateWithoutInvitesInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutInvitesInput, Prisma.StoreUncheckedCreateWithoutInvitesInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutInvitesInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutInvitesInput, Prisma.StoreUncheckedUpdateWithoutInvitesInput>
+}
+
+export type StoreUpdateWithoutInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  emailAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  Address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutStoreNestedInput
+  billboards?: Prisma.BillboardUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  filters?: Prisma.FilterUncheckedUpdateManyWithoutStoreNestedInput
+  filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
+  paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
+}
+
 export type StoreCreateWithoutThemeInput = {
   id?: string
   name: string
@@ -633,6 +1032,9 @@ export type StoreCreateWithoutThemeInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
 
@@ -654,6 +1056,9 @@ export type StoreUncheckedCreateWithoutThemeInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
 
@@ -691,6 +1096,9 @@ export type StoreUpdateWithoutThemeInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
 
@@ -712,6 +1120,9 @@ export type StoreUncheckedUpdateWithoutThemeInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
 
@@ -733,6 +1144,9 @@ export type StoreCreateWithoutPaymentConfigInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
 }
 
@@ -754,6 +1168,9 @@ export type StoreUncheckedCreateWithoutPaymentConfigInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
 }
 
@@ -791,6 +1208,9 @@ export type StoreUpdateWithoutPaymentConfigInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
 }
 
@@ -812,6 +1232,9 @@ export type StoreUncheckedUpdateWithoutPaymentConfigInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
 }
 
@@ -832,6 +1255,9 @@ export type StoreCreateWithoutBillboardsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -853,6 +1279,9 @@ export type StoreUncheckedCreateWithoutBillboardsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -890,6 +1319,9 @@ export type StoreUpdateWithoutBillboardsInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -911,6 +1343,9 @@ export type StoreUncheckedUpdateWithoutBillboardsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -932,6 +1367,9 @@ export type StoreCreateWithoutPagesInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -953,6 +1391,9 @@ export type StoreUncheckedCreateWithoutPagesInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -990,6 +1431,9 @@ export type StoreUpdateWithoutPagesInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1011,6 +1455,9 @@ export type StoreUncheckedUpdateWithoutPagesInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1032,6 +1479,9 @@ export type StoreCreateWithoutCategoriesInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1053,6 +1503,9 @@ export type StoreUncheckedCreateWithoutCategoriesInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1090,6 +1543,9 @@ export type StoreUpdateWithoutCategoriesInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1111,6 +1567,9 @@ export type StoreUncheckedUpdateWithoutCategoriesInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1132,6 +1591,9 @@ export type StoreCreateWithoutFilterItemsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1153,6 +1615,9 @@ export type StoreUncheckedCreateWithoutFilterItemsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1190,6 +1655,9 @@ export type StoreUpdateWithoutFilterItemsInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1211,6 +1679,9 @@ export type StoreUncheckedUpdateWithoutFilterItemsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1232,6 +1703,9 @@ export type StoreCreateWithoutFiltersInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1253,6 +1727,9 @@ export type StoreUncheckedCreateWithoutFiltersInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1290,6 +1767,9 @@ export type StoreUpdateWithoutFiltersInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1311,6 +1791,9 @@ export type StoreUncheckedUpdateWithoutFiltersInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1332,6 +1815,9 @@ export type StoreCreateWithoutProductsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1353,6 +1839,9 @@ export type StoreUncheckedCreateWithoutProductsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1390,6 +1879,9 @@ export type StoreUpdateWithoutProductsInput = {
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1411,6 +1903,9 @@ export type StoreUncheckedUpdateWithoutProductsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1432,6 +1927,9 @@ export type StoreCreateWithoutImagesInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1453,6 +1951,9 @@ export type StoreUncheckedCreateWithoutImagesInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1490,6 +1991,9 @@ export type StoreUpdateWithoutImagesInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1511,6 +2015,9 @@ export type StoreUncheckedUpdateWithoutImagesInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1532,6 +2039,9 @@ export type StoreCreateWithoutOrdersInput = {
   filterItems?: Prisma.FilterItemCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigCreateNestedOneWithoutStoreInput
 }
@@ -1553,6 +2063,9 @@ export type StoreUncheckedCreateWithoutOrdersInput = {
   filterItems?: Prisma.FilterItemUncheckedCreateNestedManyWithoutStoreInput
   images?: Prisma.ImageUncheckedCreateNestedManyWithoutStoreInput
   pages?: Prisma.PageUncheckedCreateNestedManyWithoutStoreInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutStoreInput
+  members?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutStoreInput
+  invites?: Prisma.StoreInviteUncheckedCreateNestedManyWithoutStoreInput
   theme?: Prisma.StoreThemeUncheckedCreateNestedOneWithoutStoreInput
   paymentConfig?: Prisma.PaymentConfigUncheckedCreateNestedOneWithoutStoreInput
 }
@@ -1590,6 +2103,9 @@ export type StoreUpdateWithoutOrdersInput = {
   filterItems?: Prisma.FilterItemUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUpdateOneWithoutStoreNestedInput
 }
@@ -1611,6 +2127,9 @@ export type StoreUncheckedUpdateWithoutOrdersInput = {
   filterItems?: Prisma.FilterItemUncheckedUpdateManyWithoutStoreNestedInput
   images?: Prisma.ImageUncheckedUpdateManyWithoutStoreNestedInput
   pages?: Prisma.PageUncheckedUpdateManyWithoutStoreNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutStoreNestedInput
+  members?: Prisma.StoreMemberUncheckedUpdateManyWithoutStoreNestedInput
+  invites?: Prisma.StoreInviteUncheckedUpdateManyWithoutStoreNestedInput
   theme?: Prisma.StoreThemeUncheckedUpdateOneWithoutStoreNestedInput
   paymentConfig?: Prisma.PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput
 }
@@ -1629,6 +2148,9 @@ export type StoreCountOutputType = {
   orders: number
   images: number
   pages: number
+  roles: number
+  members: number
+  invites: number
 }
 
 export type StoreCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1640,6 +2162,9 @@ export type StoreCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   orders?: boolean | StoreCountOutputTypeCountOrdersArgs
   images?: boolean | StoreCountOutputTypeCountImagesArgs
   pages?: boolean | StoreCountOutputTypeCountPagesArgs
+  roles?: boolean | StoreCountOutputTypeCountRolesArgs
+  members?: boolean | StoreCountOutputTypeCountMembersArgs
+  invites?: boolean | StoreCountOutputTypeCountInvitesArgs
 }
 
 /**
@@ -1708,6 +2233,27 @@ export type StoreCountOutputTypeCountPagesArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.PageWhereInput
 }
 
+/**
+ * StoreCountOutputType without action
+ */
+export type StoreCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoleWhereInput
+}
+
+/**
+ * StoreCountOutputType without action
+ */
+export type StoreCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StoreMemberWhereInput
+}
+
+/**
+ * StoreCountOutputType without action
+ */
+export type StoreCountOutputTypeCountInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StoreInviteWhereInput
+}
+
 
 export type StoreSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1727,6 +2273,9 @@ export type StoreSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   images?: boolean | Prisma.Store$imagesArgs<ExtArgs>
   pages?: boolean | Prisma.Store$pagesArgs<ExtArgs>
+  roles?: boolean | Prisma.Store$rolesArgs<ExtArgs>
+  members?: boolean | Prisma.Store$membersArgs<ExtArgs>
+  invites?: boolean | Prisma.Store$invitesArgs<ExtArgs>
   theme?: boolean | Prisma.Store$themeArgs<ExtArgs>
   paymentConfig?: boolean | Prisma.Store$paymentConfigArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
@@ -1778,6 +2327,9 @@ export type StoreInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   images?: boolean | Prisma.Store$imagesArgs<ExtArgs>
   pages?: boolean | Prisma.Store$pagesArgs<ExtArgs>
+  roles?: boolean | Prisma.Store$rolesArgs<ExtArgs>
+  members?: boolean | Prisma.Store$membersArgs<ExtArgs>
+  invites?: boolean | Prisma.Store$invitesArgs<ExtArgs>
   theme?: boolean | Prisma.Store$themeArgs<ExtArgs>
   paymentConfig?: boolean | Prisma.Store$paymentConfigArgs<ExtArgs>
   _count?: boolean | Prisma.StoreCountOutputTypeDefaultArgs<ExtArgs>
@@ -1796,6 +2348,9 @@ export type $StorePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     orders: Prisma.$OrderPayload<ExtArgs>[]
     images: Prisma.$ImagePayload<ExtArgs>[]
     pages: Prisma.$PagePayload<ExtArgs>[]
+    roles: Prisma.$RolePayload<ExtArgs>[]
+    members: Prisma.$StoreMemberPayload<ExtArgs>[]
+    invites: Prisma.$StoreInvitePayload<ExtArgs>[]
     theme: Prisma.$StoreThemePayload<ExtArgs> | null
     paymentConfig: Prisma.$PaymentConfigPayload<ExtArgs> | null
   }
@@ -2211,6 +2766,9 @@ export interface Prisma__StoreClient<T, Null = never, ExtArgs extends runtime.Ty
   orders<T extends Prisma.Store$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   images<T extends Prisma.Store$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pages<T extends Prisma.Store$pagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roles<T extends Prisma.Store$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  members<T extends Prisma.Store$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoreMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invites<T extends Prisma.Store$invitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoreInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   theme<T extends Prisma.Store$themeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$themeArgs<ExtArgs>>): Prisma.Prisma__StoreThemeClient<runtime.Types.Result.GetResult<Prisma.$StoreThemePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   paymentConfig<T extends Prisma.Store$paymentConfigArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$paymentConfigArgs<ExtArgs>>): Prisma.Prisma__PaymentConfigClient<runtime.Types.Result.GetResult<Prisma.$PaymentConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
@@ -2828,6 +3386,78 @@ export type Store$pagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.PageScalarFieldEnum | Prisma.PageScalarFieldEnum[]
+}
+
+/**
+ * Store.roles
+ */
+export type Store$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Role
+   */
+  select?: Prisma.RoleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Role
+   */
+  omit?: Prisma.RoleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoleInclude<ExtArgs> | null
+  where?: Prisma.RoleWhereInput
+  orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[]
+  cursor?: Prisma.RoleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[]
+}
+
+/**
+ * Store.members
+ */
+export type Store$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreMember
+   */
+  select?: Prisma.StoreMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StoreMember
+   */
+  omit?: Prisma.StoreMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreMemberInclude<ExtArgs> | null
+  where?: Prisma.StoreMemberWhereInput
+  orderBy?: Prisma.StoreMemberOrderByWithRelationInput | Prisma.StoreMemberOrderByWithRelationInput[]
+  cursor?: Prisma.StoreMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StoreMemberScalarFieldEnum | Prisma.StoreMemberScalarFieldEnum[]
+}
+
+/**
+ * Store.invites
+ */
+export type Store$invitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreInvite
+   */
+  select?: Prisma.StoreInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StoreInvite
+   */
+  omit?: Prisma.StoreInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreInviteInclude<ExtArgs> | null
+  where?: Prisma.StoreInviteWhereInput
+  orderBy?: Prisma.StoreInviteOrderByWithRelationInput | Prisma.StoreInviteOrderByWithRelationInput[]
+  cursor?: Prisma.StoreInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StoreInviteScalarFieldEnum | Prisma.StoreInviteScalarFieldEnum[]
 }
 
 /**

@@ -11,7 +11,9 @@ if (url.startsWith("prisma://") || url.startsWith("prisma+postgres://")) {
   prisma = new PrismaClient({ accelerateUrl: url });
 } else {
   const { PrismaPg } = require("@prisma/adapter-pg");
-  prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: url }) });
+  prisma = new PrismaClient({
+    adapter: new PrismaPg({ connectionString: url }),
+  });
 }
 
 // ─── Fixed IDs ────────────────────────────────────────────────
@@ -122,16 +124,33 @@ const IMG = {
 async function main() {
   console.log("🌱 Seeding Rajvi Sofa & Bed Store...\n");
 
+  // ─── 0. Admin User ──────────────────────────────────────────────
+  const adminUser = await prisma.adminUser.upsert({
+    where: { email: "ritik@example.com" },
+    update: { name: "ritik raj" },
+    create: {
+      id: USER_ID,
+      email: "ritikraj1369@gmail.com",
+      name: "ritik raj",
+      passwordHash:
+        "$2b$12$mOoK4R3cLuOjnTIjJQRV1O/5fFNgrK3fiAl41MBd6oZYLiG2aUHjO", // "Rraj@2003"
+    },
+  });
+  console.log(`✅ Admin User: "${adminUser.name}" (${adminUser.id})`);
+
   // ─── 1. Store ──────────────────────────────────────────────────
   const store = await prisma.store.upsert({
     where: { id: STORE_ID },
-    update: {},
+    update: {
+      phoneNumber: "9001175253",
+      userId: adminUser.id,
+    },
     create: {
       id: STORE_ID,
       name: "Rajvi Sofa & Bed",
-      userId: USER_ID,
+      userId: adminUser.id,
       emailAddress: "rajvimattress@gmail.com",
-      phoneNumber: "+91-9876543210",
+      phoneNumber: "9001175253",
       Address: "Ring Road, Katargam, Surat, Gujarat - 395004",
     },
   });
@@ -573,6 +592,117 @@ async function main() {
     },
   });
   console.log(`✅ Payment Config: COD enabled (INR, GST 18%)`);
+
+  // ─── 10. RBAC Roles & Team Members ─────────────────────────────
+  const editorRole = await prisma.role.upsert({
+    where: { storeId_name: { storeId: STORE_ID, name: "Editor" } },
+    update: {},
+    create: {
+      storeId: STORE_ID,
+      name: "Editor",
+      description: "Can view and edit content",
+      isSystem: true,
+      permissions: {
+        create: [
+          { resource: "products", action: "view" },
+          { resource: "products", action: "create" },
+          { resource: "products", action: "update" },
+          { resource: "categories", action: "view" },
+          { resource: "categories", action: "create" },
+          { resource: "categories", action: "update" },
+        ],
+      },
+    },
+  });
+
+  const deliveryRole = await prisma.role.upsert({
+    where: { storeId_name: { storeId: STORE_ID, name: "Delivery Boy" } },
+    update: {},
+    create: {
+      storeId: STORE_ID,
+      name: "Delivery Boy",
+      description: "Can only view and update order status for deliveries",
+      isSystem: true,
+      permissions: {
+        create: [
+          { resource: "orders", action: "view" },
+          { resource: "orders", action: "update" },
+        ],
+      },
+    },
+  });
+
+  const teamMember1 = await prisma.adminUser.upsert({
+    where: { email: "editor@example.com" },
+    update: {},
+    create: {
+      email: "editor@example.com",
+      name: "Content Editor",
+      passwordHash:
+        "$2a$12$R.P.2x3D./50KkO10aHlIunG39e8SREm3qZ5Z/sD041B7RIn.QvRK", // "password123"
+    },
+  });
+
+  const teamMember2 = await prisma.adminUser.upsert({
+    where: { email: "delivery@example.com" },
+    update: {},
+    create: {
+      email: "delivery@example.com",
+      name: "Delivery Staff",
+      passwordHash:
+        "$2a$12$R.P.2x3D./50KkO10aHlIunG39e8SREm3qZ5Z/sD041B7RIn.QvRK", // "password123"
+    },
+  });
+
+  await prisma.storeMember.upsert({
+    where: { storeId_userId: { storeId: STORE_ID, userId: teamMember1.id } },
+    update: { roleId: editorRole.id },
+    create: {
+      storeId: STORE_ID,
+      userId: teamMember1.id,
+      roleId: editorRole.id,
+    },
+  });
+
+  await prisma.storeMember.upsert({
+    where: { storeId_userId: { storeId: STORE_ID, userId: teamMember2.id } },
+    update: { roleId: deliveryRole.id },
+    create: {
+      storeId: STORE_ID,
+      userId: teamMember2.id,
+      roleId: deliveryRole.id,
+    },
+  });
+  console.log(`✅ Roles & Team Members created`);
+
+  // ─── 11. Sample Order ────────────────────────────────────────────
+  const order = await prisma.order.create({
+    data: {
+      storeId: STORE_ID,
+      userId: "sample-customer-123", // Dummy customer
+      firstName: "John",
+      lastName: "Doe",
+      emailAddress: "johndoe@example.com",
+      phoneNumber: "9876543210",
+      transactionId: "TXN_" + Math.floor(Math.random() * 1000000),
+      orderStatus: "Paid",
+      isPaid: true,
+      totalAmount: 35000,
+      taxAmount: 6300,
+      address: "123 Street, Test City",
+      paymentMethod: "cod",
+      orderItems: {
+        create: [
+          {
+            productId: PROD.p01,
+            quantity: 1,
+            priceAtTime: 35000,
+          },
+        ],
+      },
+    },
+  });
+  console.log(`✅ Order: created (${order.id})`);
 
   // ─── Done! ─────────────────────────────────────────────────────
   console.log("\n🎉 Rajvi Sofa & Bed store seeded successfully!\n");

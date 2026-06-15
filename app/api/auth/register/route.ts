@@ -26,6 +26,24 @@ export async function POST(req: Request) {
       data: { name, email: email.toLowerCase(), passwordHash },
     });
 
+    // Accept any pending invites for this email
+    const pendingInvites = await prismadb.storeInvite.findMany({
+      where: { email: email.toLowerCase(), status: "pending", expiresAt: { gte: new Date() } },
+    });
+    for (const invite of pendingInvites) {
+      await prismadb.storeMember.create({
+        data: {
+          storeId: invite.storeId,
+          userId: admin.id,
+          roleId: invite.roleId,
+        },
+      });
+      await prismadb.storeInvite.update({
+        where: { id: invite.id },
+        data: { status: "accepted" },
+      });
+    }
+
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
     session.userId = admin.id;
     session.name = admin.name;

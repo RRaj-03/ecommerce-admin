@@ -626,10 +626,6 @@ export type PaymentConfigUncheckedUpdateOneWithoutStoreNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PaymentConfigUpdateToOneWithWhereWithoutStoreInput, Prisma.PaymentConfigUpdateWithoutStoreInput>, Prisma.PaymentConfigUncheckedUpdateWithoutStoreInput>
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
