@@ -249,7 +249,7 @@ export async function POST(
         .merchantOrderId(result.order.id)
         .amount(Math.round(result.totalAmount * 100)) // amount in paisa
         .redirectUrl(
-          `${storeUrl}/cart?phonepe_status=1&orderId=${result.order.id}`
+          `${storeUrl}/order/${result.order.id}?phonepe_status=1`
         )
         .build();
 

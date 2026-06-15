@@ -18,27 +18,35 @@ const Orders = async ({ params }: { params: { storeId: string } }) => {
       },
     },
   });
-  const formattedOrders: OrderColumn[] = orders.map((item) => ({
-    userId: item.userId,
-    fullName: item.firstName + " " + item.lastName,
-    emailAddress: item.emailAddress,
-    phoneNumber: item.phoneNumber,
-    id: item.id,
-    phone: item.phone,
-    address: item.address,
-    products: item.orderItems
-      .map((orderItem) => orderItem.product.name)
-      .join(", "),
-    totalPrice: formatter.format(
-      item.orderItems.reduce((total, item) => {
-        return total + Number(item.product.price);
-      }, 0)
-    ),
-    transactionId: item.transactionId,
-    isPaid: item.isPaid,
-    createdAt: format(item.createdAt, "MMMM do, yyyy"),
-    status: item.orderStatus,
-  }));
+  const formattedOrders: OrderColumn[] = orders.map((item) => {
+    const subtotal = item.orderItems.reduce((total, oi) => {
+      const price = oi.priceAtTime ? Number(oi.priceAtTime) : Number(oi.product.price);
+      return total + price * (oi.quantity || 1);
+    }, 0);
+    const tax = Number(item.taxAmount) || 0;
+    const total = Number(item.totalAmount) > 0 ? Number(item.totalAmount) : subtotal;
+
+    return {
+      userId: item.userId,
+      fullName: item.firstName + " " + item.lastName,
+      emailAddress: item.emailAddress,
+      phoneNumber: item.phoneNumber,
+      id: item.id,
+      phone: item.phone,
+      address: item.address,
+      products: item.orderItems
+        .map((orderItem) => orderItem.product.name)
+        .join(", "),
+      amount: formatter.format(subtotal),
+      tax: formatter.format(tax),
+      total: formatter.format(total),
+      paymentMethod: item.paymentMethod || "stripe",
+      transactionId: item.transactionId,
+      isPaid: item.isPaid,
+      createdAt: format(item.createdAt, "MMMM do, yyyy"),
+      status: item.orderStatus,
+    };
+  });
 
   return (
     <div className="flex-col">

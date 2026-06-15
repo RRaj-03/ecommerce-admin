@@ -8,7 +8,9 @@ export type OrderColumn = {
   phone: string;
   address: string;
   isPaid: boolean;
-  totalPrice: string;
+  amount: string;
+  tax: string;
+  total: string;
   products: string;
   createdAt: string;
   fullName: string;
@@ -17,6 +19,7 @@ export type OrderColumn = {
   userId: string;
   transactionId: string;
   status: string;
+  paymentMethod: string;
 };
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -45,8 +48,20 @@ export const columns: ColumnDef<OrderColumn>[] = [
     header: "Address",
   },
   {
-    accessorKey: "totalPrice",
-    header: "Total Price",
+    accessorKey: "amount",
+    header: "Amount",
+  },
+  {
+    accessorKey: "tax",
+    header: "Tax",
+  },
+  {
+    accessorKey: "total",
+    header: "Total",
+  },
+  {
+    accessorKey: "paymentMethod",
+    header: "Payment",
   },
   {
     accessorKey: "transactionId",
