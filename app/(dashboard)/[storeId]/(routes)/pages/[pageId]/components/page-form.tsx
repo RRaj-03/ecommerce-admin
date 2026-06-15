@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
+import { PageBuilder } from "./page-builder";
 
 interface PageFormProps {
   initialData: Page | null;
@@ -146,10 +146,10 @@ const PageForm = ({ initialData }: PageFormProps) => {
             name="content"
             control={form.control}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Content</FormLabel>
+              <FormItem className="w-full border rounded-lg p-4 bg-muted/20">
+                <FormLabel className="text-base font-semibold">Page Builder</FormLabel>
                 <FormControl>
-                  <Textarea disabled={loading} placeholder="Page content..." rows={10} {...field} />
+                  <PageBuilder value={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
