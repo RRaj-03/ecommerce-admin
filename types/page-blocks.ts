@@ -1,4 +1,4 @@
-export type BlockType = 'hero' | 'text' | 'featureGrid' | 'cta';
+export type BlockType = 'hero' | 'text' | 'featureGrid' | 'cta' | 'faq' | 'testimonial' | 'gallery';
 
 export interface BlockStyles {
   primaryColor?: string;
@@ -61,4 +61,52 @@ export interface CTABlock extends BaseBlock {
   };
 }
 
-export type PageBlock = HeroBlock | TextBlock | FeatureGridBlock | CTABlock;
+export interface FAQItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface FAQBlock extends BaseBlock {
+  type: 'faq';
+  data: {
+    title: string;
+    subtitle: string;
+    items: FAQItem[];
+  };
+}
+
+export interface TestimonialItem {
+  id: string;
+  name: string;
+  role: string;
+  content: string;
+  avatarUrl: string;
+}
+
+export interface TestimonialBlock extends BaseBlock {
+  type: 'testimonial';
+  data: {
+    title: string;
+    subtitle: string;
+    items: TestimonialItem[];
+  };
+}
+
+export interface GalleryImage {
+  id: string;
+  url: string;
+  alt: string;
+}
+
+export interface GalleryBlock extends BaseBlock {
+  type: 'gallery';
+  data: {
+    title: string;
+    subtitle: string;
+    images: GalleryImage[];
+    columns: 2 | 3 | 4;
+  };
+}
+
+export type PageBlock = HeroBlock | TextBlock | FeatureGridBlock | CTABlock | FAQBlock | TestimonialBlock | GalleryBlock;
