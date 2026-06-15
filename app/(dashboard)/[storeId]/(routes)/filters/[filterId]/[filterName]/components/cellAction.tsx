@@ -42,6 +42,21 @@ export const CellAction = ({ data }: { data: FilterItemColumn }) => {
       setLoading(false);
     }
   };
+  const onDuplicate = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`/api/${params.storeId}/filters/${params.filterId}/filterItems/${data.id}/duplicate`);
+      router.refresh();
+      // Using the exact route pattern already used for Edit
+      router.push(`/${params.storeId}/filterItems/${res.data.id}`);
+      toast.success("FilterItem duplicated.");
+    } catch (error) {
+      toast.error("Failed to duplicate FilterItem.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
@@ -68,6 +83,10 @@ export const CellAction = ({ data }: { data: FilterItemColumn }) => {
           >
             <Copy className="mr-2 w-4 h-4" />
             Copy Id
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onDuplicate} disabled={loading}>
+            <Copy className="mr-2 w-4 h-4" />
+            Duplicate
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {

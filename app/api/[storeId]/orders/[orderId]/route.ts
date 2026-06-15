@@ -67,9 +67,9 @@ export async function PATCH(
   }
 ) {
   try {
-    const { userId } = await auth();
+    const { userId, session } = await auth();
     const body = await req.json();
-    const { status, trackingNumber, trackingUrl, carrier, estimatedDelivery, note } = body;
+    const { status, trackingNumber, trackingUrl, carrier, estimatedDelivery, note, isPaid, manualPayment } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -95,6 +95,12 @@ export async function PATCH(
     if (trackingUrl !== undefined) updateData.trackingUrl = trackingUrl;
     if (carrier !== undefined) updateData.carrier = carrier;
     if (estimatedDelivery) updateData.estimatedDelivery = new Date(estimatedDelivery);
+    if (isPaid !== undefined) {
+      updateData.isPaid = isPaid;
+      if (manualPayment) {
+        updateData.paymentMethod = `Manual - ${session.name || "Admin"}`;
+      }
+    }
 
     // Update order
     const order = await prismadb.order.update({

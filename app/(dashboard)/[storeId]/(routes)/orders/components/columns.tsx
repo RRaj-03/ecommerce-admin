@@ -20,9 +20,27 @@ export type OrderColumn = {
   transactionId: string;
   status: string;
   paymentMethod: string;
+  orderItemsRaw: any[];
 };
 
 export const columns: ColumnDef<OrderColumn>[] = [
+  {
+    id: "expander",
+    header: () => null,
+    cell: ({ row }) => {
+      return row.getCanExpand() ? (
+        <button
+          {...{
+            onClick: row.getToggleExpandedHandler(),
+            style: { cursor: "pointer" },
+          }}
+          className="p-1 hover:bg-slate-100 rounded"
+        >
+          {row.getIsExpanded() ? "▼" : "▶"}
+        </button>
+      ) : null;
+    },
+  },
   {
     accessorKey: "products",
     header: "Products",

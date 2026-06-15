@@ -40,6 +40,20 @@ export const CellAction = ({ data }: { data: CategoryColumn }) => {
       setLoading(false);
     }
   };
+  const onDuplicate = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(`/api/${params.storeId}/categories/${data.id}/duplicate`);
+      router.refresh();
+      router.push(`/${params.storeId}/categories/${res.data.id}`);
+      toast.success("Category duplicated.");
+    } catch (error) {
+      toast.error("Failed to duplicate category.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
@@ -66,6 +80,10 @@ export const CellAction = ({ data }: { data: CategoryColumn }) => {
           >
             <Copy className="mr-2 w-4 h-4" />
             Copy Id
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={onDuplicate} disabled={loading}>
+            <Copy className="mr-2 w-4 h-4" />
+            Duplicate
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {

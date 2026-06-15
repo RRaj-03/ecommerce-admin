@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, MoreHorizontal, Truck, Eye } from "lucide-react";
+import { Copy, MoreHorizontal, Truck, Eye, CheckCircle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -66,6 +66,22 @@ export const CellAction = ({ data }: { data: OrderColumn }) => {
       toast.success(`Order status updated to ${newStatus}`);
     } catch (error) {
       toast.error("Failed to update order status");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onMarkAsPaid = async () => {
+    try {
+      setLoading(true);
+      await axios.patch(`/api/${params.storeId}/orders/${data.id}`, {
+        isPaid: true,
+        manualPayment: true,
+      });
+      router.refresh();
+      toast.success(`Order marked as paid manually`);
+    } catch (error) {
+      toast.error("Failed to mark order as paid");
     } finally {
       setLoading(false);
     }
@@ -172,6 +188,12 @@ export const CellAction = ({ data }: { data: OrderColumn }) => {
             <Truck className="mr-2 w-4 h-4" />
             Add Tracking
           </DropdownMenuItem>
+          {!data.isPaid && (
+            <DropdownMenuItem onClick={onMarkAsPaid} disabled={loading}>
+              <CheckCircle className="mr-2 w-4 h-4" />
+              Mark as Paid
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Update Status</DropdownMenuSubTrigger>

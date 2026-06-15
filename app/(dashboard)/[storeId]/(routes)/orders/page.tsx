@@ -13,7 +13,11 @@ const Orders = async ({ params }: { params: { storeId: string } }) => {
     include: {
       orderItems: {
         include: {
-          product: true,
+          product: {
+            include: {
+              images: true,
+            },
+          },
         },
       },
     },
@@ -45,6 +49,7 @@ const Orders = async ({ params }: { params: { storeId: string } }) => {
       isPaid: item.isPaid,
       createdAt: format(item.createdAt, "MMMM do, yyyy"),
       status: item.orderStatus,
+      orderItemsRaw: item.orderItems,
     };
   });
 
