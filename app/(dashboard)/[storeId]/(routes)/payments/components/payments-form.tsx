@@ -122,14 +122,14 @@ const PaymentsForm = ({ storeId, initialConfig }: PaymentsFormProps) => {
           className={cn(
             "border rounded-xl p-6 space-y-4 transition-colors",
             config.phonepeEnabled
-              ? "border-purple-400/30 bg-purple-50 dark:bg-purple-950/20"
+              ? "border-[#5f259f]/30 bg-[#5f259f]/5 dark:bg-[#5f259f]/20"
               : "border-border",
           )}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-950">
-                <Smartphone className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <div className="p-2 rounded-lg bg-[#5f259f]/10 dark:bg-[#5f259f]/30">
+                <Smartphone className="w-5 h-5 text-[#5f259f] dark:text-[#a06ee0]" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg">PhonePe / UPI</h3>
