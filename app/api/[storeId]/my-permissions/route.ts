@@ -1,12 +1,7 @@
-import prismadb from "@/lib/prismadb";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { getUserPermissions } from "@/lib/rbac";
 
-/**
- * Returns the current user's permissions for this store.
- * Used by the navbar and UI to conditionally show/hide elements.
- */
 export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -15,11 +10,15 @@ export async function GET(
     const { userId } = await auth();
     if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
 
-    const { isOwner, permissions } = await getUserPermissions(userId, params.storeId);
+    const result = await getUserPermissions(userId, params.storeId);
 
     return NextResponse.json({
-      isOwner,
-      permissions: Array.from(permissions),
+      isOwner: result.isOwner,
+      permissions: Array.from(result.permissions),
+      permissionDetails: result.permissionDetails,
+      roleLevel: result.roleLevel,
+      canDelegate: result.canDelegate,
+      memberId: result.memberId,
     });
   } catch (error) {
     console.log("[MY_PERMISSIONS_GET]", error);

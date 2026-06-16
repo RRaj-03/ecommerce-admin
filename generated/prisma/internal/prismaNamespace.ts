@@ -403,6 +403,7 @@ export const ModelName = {
   Image: 'Image',
   Order: 'Order',
   OrderStatusHistory: 'OrderStatusHistory',
+  OrderAssignmentHistory: 'OrderAssignmentHistory',
   OrderItem: 'OrderItem',
   CustomerAddress: 'CustomerAddress'
 } as const
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "adminUser" | "customer" | "store" | "role" | "permission" | "storeMember" | "storeInvite" | "storeTheme" | "paymentConfig" | "billboard" | "page" | "category" | "filterItem" | "filter" | "product" | "productOnFilterItem" | "image" | "order" | "orderStatusHistory" | "orderItem" | "customerAddress"
+    modelProps: "adminUser" | "customer" | "store" | "role" | "permission" | "storeMember" | "storeInvite" | "storeTheme" | "paymentConfig" | "billboard" | "page" | "category" | "filterItem" | "filter" | "product" | "productOnFilterItem" | "image" | "order" | "orderStatusHistory" | "orderAssignmentHistory" | "orderItem" | "customerAddress"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1830,6 +1831,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OrderAssignmentHistory: {
+      payload: Prisma.$OrderAssignmentHistoryPayload<ExtArgs>
+      fields: Prisma.OrderAssignmentHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrderAssignmentHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrderAssignmentHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.OrderAssignmentHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrderAssignmentHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.OrderAssignmentHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.OrderAssignmentHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.OrderAssignmentHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrderAssignmentHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.OrderAssignmentHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        update: {
+          args: Prisma.OrderAssignmentHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrderAssignmentHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrderAssignmentHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrderAssignmentHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrderAssignmentHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderAssignmentHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.OrderAssignmentHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderAssignmentHistory>
+        }
+        groupBy: {
+          args: Prisma.OrderAssignmentHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderAssignmentHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrderAssignmentHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrderAssignmentHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
     OrderItem: {
       payload: Prisma.$OrderItemPayload<ExtArgs>
       fields: Prisma.OrderItemFieldRefs
@@ -2067,6 +2142,8 @@ export const RoleScalarFieldEnum = {
   name: 'name',
   description: 'description',
   isSystem: 'isSystem',
+  level: 'level',
+  canDelegate: 'canDelegate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2078,7 +2155,8 @@ export const PermissionScalarFieldEnum = {
   id: 'id',
   roleId: 'roleId',
   resource: 'resource',
-  action: 'action'
+  action: 'action',
+  scope: 'scope'
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
@@ -2089,6 +2167,8 @@ export const StoreMemberScalarFieldEnum = {
   storeId: 'storeId',
   userId: 'userId',
   roleId: 'roleId',
+  managerId: 'managerId',
+  isAvailable: 'isAvailable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2297,6 +2377,7 @@ export const OrderScalarFieldEnum = {
   refundReciptUrl: 'refundReciptUrl',
   totalAmount: 'totalAmount',
   taxAmount: 'taxAmount',
+  assignedToId: 'assignedToId',
   trackingNumber: 'trackingNumber',
   trackingUrl: 'trackingUrl',
   carrier: 'carrier',
@@ -2318,6 +2399,19 @@ export const OrderStatusHistoryScalarFieldEnum = {
 } as const
 
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
+
+
+export const OrderAssignmentHistoryScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  assignedById: 'assignedById',
+  assignedToId: 'assignedToId',
+  previousToId: 'previousToId',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderAssignmentHistoryScalarFieldEnum = (typeof OrderAssignmentHistoryScalarFieldEnum)[keyof typeof OrderAssignmentHistoryScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {
@@ -2568,6 +2662,7 @@ export type GlobalOmitConfig = {
   image?: Prisma.ImageOmit
   order?: Prisma.OrderOmit
   orderStatusHistory?: Prisma.OrderStatusHistoryOmit
+  orderAssignmentHistory?: Prisma.OrderAssignmentHistoryOmit
   orderItem?: Prisma.OrderItemOmit
   customerAddress?: Prisma.CustomerAddressOmit
 }

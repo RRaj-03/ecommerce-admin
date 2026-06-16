@@ -1,7 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import { requirePermission } from "@/lib/rbac";
+import { requirePermission, validateDelegatedRole } from "@/lib/rbac";
 import { DEFAULT_ROLES } from "@/lib/permissions";
 
 export async function GET(
@@ -21,7 +21,7 @@ export async function GET(
         permissions: true,
         _count: { select: { members: true } },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: [{ level: "asc" }, { createdAt: "asc" }],
     });
 
     return NextResponse.json(roles);
@@ -43,19 +43,33 @@ export async function POST(
     if (!check.allowed) return new NextResponse(check.message, { status: check.status });
 
     const body = await req.json();
-    const { name, description, permissions } = body;
+    const { name, description, permissions, level, canDelegate } = body;
 
     if (!name) return new NextResponse("Name is required", { status: 400 });
+
+    // Validate delegation rules
+    const validation = await validateDelegatedRole(
+      userId,
+      params.storeId,
+      level || 100,
+      permissions || []
+    );
+    if (!validation.valid) {
+      return new NextResponse(validation.reason, { status: 403 });
+    }
 
     const role = await prismadb.role.create({
       data: {
         storeId: params.storeId,
         name,
         description: description || null,
+        level: level || 100,
+        canDelegate: canDelegate || false,
         permissions: {
-          create: (permissions || []).map((p: { resource: string; action: string }) => ({
+          create: (permissions || []).map((p: { resource: string; action: string; scope?: string }) => ({
             resource: p.resource,
             action: p.action,
+            scope: p.scope || "all",
           })),
         },
       },
@@ -69,7 +83,7 @@ export async function POST(
   }
 }
 
-// POST to seed default roles for a store
+// PUT — seed default roles for a store
 export async function PUT(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -78,7 +92,6 @@ export async function PUT(
     const { userId } = await auth();
     if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
 
-    // Only owner can seed default roles
     const store = await prismadb.store.findUnique({
       where: { id: params.storeId },
       select: { userId: true },
@@ -87,7 +100,6 @@ export async function PUT(
       return new NextResponse("Only the owner can initialize roles", { status: 403 });
     }
 
-    // Check if roles already exist
     const existingRoles = await prismadb.role.findMany({
       where: { storeId: params.storeId },
     });
@@ -95,7 +107,6 @@ export async function PUT(
       return NextResponse.json({ message: "Roles already exist", roles: existingRoles });
     }
 
-    // Create default roles
     const createdRoles = [];
     for (const roleDef of DEFAULT_ROLES) {
       const role = await prismadb.role.create({
@@ -104,10 +115,13 @@ export async function PUT(
           name: roleDef.name,
           description: roleDef.description,
           isSystem: true,
+          level: roleDef.level,
+          canDelegate: roleDef.canDelegate,
           permissions: {
             create: roleDef.permissions.map((p) => ({
               resource: p.resource,
               action: p.action,
+              scope: p.scope || "all",
             })),
           },
         },

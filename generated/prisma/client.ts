@@ -135,6 +135,11 @@ export type Order = Prisma.OrderModel
  */
 export type OrderStatusHistory = Prisma.OrderStatusHistoryModel
 /**
+ * Model OrderAssignmentHistory
+ * 
+ */
+export type OrderAssignmentHistory = Prisma.OrderAssignmentHistoryModel
+/**
  * Model OrderItem
  * 
  */

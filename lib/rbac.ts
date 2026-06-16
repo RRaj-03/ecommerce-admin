@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { Resource, Action } from "@/lib/permissions";
+import { Resource, Action, Scope } from "@/lib/permissions";
 
 /**
  * Check if a user has a specific permission on a store.
@@ -11,7 +11,6 @@ export async function checkPermission(
   resource: Resource,
   action: Action
 ): Promise<boolean> {
-  // 1. Check if user is the store owner — always has full access
   const store = await prismadb.store.findUnique({
     where: { id: storeId },
     select: { userId: true },
@@ -20,7 +19,6 @@ export async function checkPermission(
   if (!store) return false;
   if (store.userId === userId) return true;
 
-  // 2. Check if user is a member with the required permission
   const member = await prismadb.storeMember.findUnique({
     where: { storeId_userId: { storeId, userId } },
     include: {
@@ -39,8 +37,7 @@ export async function checkPermission(
 }
 
 /**
- * Require a permission — returns a NextResponse 403 if denied.
- * Use in API routes.
+ * Require a permission — returns 403 info if denied.
  */
 export async function requirePermission(
   userId: string | null,
@@ -65,27 +62,81 @@ export async function requirePermission(
 }
 
 /**
- * Get all permissions for a user on a store.
- * Returns a Set of "resource:action" strings for quick lookups.
- * The owner gets all permissions.
+ * Get the scope for a specific permission.
+ * Owner always gets "all".
  */
-export async function getUserPermissions(
+export async function getPermissionScope(
   userId: string,
-  storeId: string
-): Promise<{ isOwner: boolean; permissions: Set<string> }> {
+  storeId: string,
+  resource: Resource,
+  action: Action
+): Promise<Scope> {
   const store = await prismadb.store.findUnique({
     where: { id: storeId },
     select: { userId: true },
   });
 
-  if (!store) return { isOwner: false, permissions: new Set() };
+  if (!store) return "assigned";
+  if (store.userId === userId) return "all";
 
-  // Owner has all permissions
+  const member = await prismadb.storeMember.findUnique({
+    where: { storeId_userId: { storeId, userId } },
+    include: {
+      role: {
+        include: {
+          permissions: {
+            where: { resource, action },
+          },
+        },
+      },
+    },
+  });
+
+  if (!member || member.role.permissions.length === 0) return "assigned";
+  return (member.role.permissions[0].scope as Scope) || "all";
+}
+
+/**
+ * Get all permissions for a user on a store.
+ */
+export async function getUserPermissions(
+  userId: string,
+  storeId: string
+): Promise<{
+  isOwner: boolean;
+  permissions: Set<string>;
+  permissionDetails: { resource: string; action: string; scope: string }[];
+  roleLevel: number;
+  canDelegate: boolean;
+  memberId: string | null;
+}> {
+  const store = await prismadb.store.findUnique({
+    where: { id: storeId },
+    select: { userId: true },
+  });
+
+  const defaultResult = {
+    isOwner: false,
+    permissions: new Set<string>(),
+    permissionDetails: [],
+    roleLevel: 999,
+    canDelegate: false,
+    memberId: null as string | null,
+  };
+
+  if (!store) return defaultResult;
+
   if (store.userId === userId) {
-    return { isOwner: true, permissions: new Set(["*"]) };
+    return {
+      isOwner: true,
+      permissions: new Set(["*"]),
+      permissionDetails: [],
+      roleLevel: 0,
+      canDelegate: true,
+      memberId: null,
+    };
   }
 
-  // Find member and their role's permissions
   const member = await prismadb.storeMember.findUnique({
     where: { storeId_userId: { storeId, userId } },
     include: {
@@ -97,17 +148,28 @@ export async function getUserPermissions(
     },
   });
 
-  if (!member) return { isOwner: false, permissions: new Set() };
+  if (!member) return defaultResult;
 
   const permissions = new Set(
     member.role.permissions.map((p) => `${p.resource}:${p.action}`)
   );
 
-  return { isOwner: false, permissions };
+  return {
+    isOwner: false,
+    permissions,
+    permissionDetails: member.role.permissions.map((p) => ({
+      resource: p.resource,
+      action: p.action,
+      scope: p.scope,
+    })),
+    roleLevel: member.role.level,
+    canDelegate: member.role.canDelegate,
+    memberId: member.id,
+  };
 }
 
 /**
- * Check if a user has access to a store (either as owner or member).
+ * Check if a user has access to a store (owner or member).
  */
 export async function hasStoreAccess(
   userId: string,
@@ -119,6 +181,62 @@ export async function hasStoreAccess(
       OR: [{ userId }, { members: { some: { userId } } }],
     },
   });
-
   return !!store;
+}
+
+/**
+ * Get all subordinate member IDs recursively for a given member.
+ */
+export async function getSubordinateIds(memberId: string): Promise<string[]> {
+  const directs = await prismadb.storeMember.findMany({
+    where: { managerId: memberId },
+    select: { id: true },
+  });
+
+  const ids: string[] = directs.map((d) => d.id);
+  for (const direct of directs) {
+    const nested = await getSubordinateIds(direct.id);
+    ids.push(...nested);
+  }
+  return ids;
+}
+
+/**
+ * Validate that a role being created/updated respects delegation rules.
+ * The creator can only grant permissions they themselves have,
+ * and the new role's level must be higher (less powerful) than theirs.
+ */
+export async function validateDelegatedRole(
+  creatorUserId: string,
+  storeId: string,
+  newRoleLevel: number,
+  newPermissions: { resource: string; action: string; scope?: string }[]
+): Promise<{ valid: true } | { valid: false; reason: string }> {
+  const creatorPerms = await getUserPermissions(creatorUserId, storeId);
+
+  if (creatorPerms.isOwner) return { valid: true };
+
+  if (!creatorPerms.canDelegate) {
+    return { valid: false, reason: "Your role does not allow creating new roles" };
+  }
+
+  if (newRoleLevel <= creatorPerms.roleLevel) {
+    return {
+      valid: false,
+      reason: `New role level (${newRoleLevel}) must be greater than your level (${creatorPerms.roleLevel})`,
+    };
+  }
+
+  // Check each permission is a subset of creator's permissions
+  for (const perm of newPermissions) {
+    const key = `${perm.resource}:${perm.action}`;
+    if (!creatorPerms.permissions.has(key) && !creatorPerms.permissions.has("*")) {
+      return {
+        valid: false,
+        reason: `You cannot grant "${key}" — you don't have this permission yourself`,
+      };
+    }
+  }
+
+  return { valid: true };
 }

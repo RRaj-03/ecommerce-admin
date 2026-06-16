@@ -29,6 +29,8 @@ export type StoreMemberMinAggregateOutputType = {
   storeId: string | null
   userId: string | null
   roleId: string | null
+  managerId: string | null
+  isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +40,8 @@ export type StoreMemberMaxAggregateOutputType = {
   storeId: string | null
   userId: string | null
   roleId: string | null
+  managerId: string | null
+  isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +51,8 @@ export type StoreMemberCountAggregateOutputType = {
   storeId: number
   userId: number
   roleId: number
+  managerId: number
+  isAvailable: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +64,8 @@ export type StoreMemberMinAggregateInputType = {
   storeId?: true
   userId?: true
   roleId?: true
+  managerId?: true
+  isAvailable?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +75,8 @@ export type StoreMemberMaxAggregateInputType = {
   storeId?: true
   userId?: true
   roleId?: true
+  managerId?: true
+  isAvailable?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +86,8 @@ export type StoreMemberCountAggregateInputType = {
   storeId?: true
   userId?: true
   roleId?: true
+  managerId?: true
+  isAvailable?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +170,8 @@ export type StoreMemberGroupByOutputType = {
   storeId: string
   userId: string
   roleId: string
+  managerId: string | null
+  isAvailable: boolean
   createdAt: Date
   updatedAt: Date
   _count: StoreMemberCountAggregateOutputType | null
@@ -188,11 +202,16 @@ export type StoreMemberWhereInput = {
   storeId?: Prisma.StringFilter<"StoreMember"> | string
   userId?: Prisma.StringFilter<"StoreMember"> | string
   roleId?: Prisma.StringFilter<"StoreMember"> | string
+  managerId?: Prisma.StringNullableFilter<"StoreMember"> | string | null
+  isAvailable?: Prisma.BoolFilter<"StoreMember"> | boolean
   createdAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
   store?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   user?: Prisma.XOR<Prisma.AdminUserScalarRelationFilter, Prisma.AdminUserWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  manager?: Prisma.XOR<Prisma.StoreMemberNullableScalarRelationFilter, Prisma.StoreMemberWhereInput> | null
+  subordinates?: Prisma.StoreMemberListRelationFilter
+  assignedOrders?: Prisma.OrderListRelationFilter
 }
 
 export type StoreMemberOrderByWithRelationInput = {
@@ -200,11 +219,16 @@ export type StoreMemberOrderByWithRelationInput = {
   storeId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  managerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   store?: Prisma.StoreOrderByWithRelationInput
   user?: Prisma.AdminUserOrderByWithRelationInput
   role?: Prisma.RoleOrderByWithRelationInput
+  manager?: Prisma.StoreMemberOrderByWithRelationInput
+  subordinates?: Prisma.StoreMemberOrderByRelationAggregateInput
+  assignedOrders?: Prisma.OrderOrderByRelationAggregateInput
 }
 
 export type StoreMemberWhereUniqueInput = Prisma.AtLeast<{
@@ -216,11 +240,16 @@ export type StoreMemberWhereUniqueInput = Prisma.AtLeast<{
   storeId?: Prisma.StringFilter<"StoreMember"> | string
   userId?: Prisma.StringFilter<"StoreMember"> | string
   roleId?: Prisma.StringFilter<"StoreMember"> | string
+  managerId?: Prisma.StringNullableFilter<"StoreMember"> | string | null
+  isAvailable?: Prisma.BoolFilter<"StoreMember"> | boolean
   createdAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
   store?: Prisma.XOR<Prisma.StoreScalarRelationFilter, Prisma.StoreWhereInput>
   user?: Prisma.XOR<Prisma.AdminUserScalarRelationFilter, Prisma.AdminUserWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
+  manager?: Prisma.XOR<Prisma.StoreMemberNullableScalarRelationFilter, Prisma.StoreMemberWhereInput> | null
+  subordinates?: Prisma.StoreMemberListRelationFilter
+  assignedOrders?: Prisma.OrderListRelationFilter
 }, "id" | "storeId_userId">
 
 export type StoreMemberOrderByWithAggregationInput = {
@@ -228,6 +257,8 @@ export type StoreMemberOrderByWithAggregationInput = {
   storeId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  managerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.StoreMemberCountOrderByAggregateInput
@@ -243,17 +274,23 @@ export type StoreMemberScalarWhereWithAggregatesInput = {
   storeId?: Prisma.StringWithAggregatesFilter<"StoreMember"> | string
   userId?: Prisma.StringWithAggregatesFilter<"StoreMember"> | string
   roleId?: Prisma.StringWithAggregatesFilter<"StoreMember"> | string
+  managerId?: Prisma.StringNullableWithAggregatesFilter<"StoreMember"> | string | null
+  isAvailable?: Prisma.BoolWithAggregatesFilter<"StoreMember"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StoreMember"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"StoreMember"> | Date | string
 }
 
 export type StoreMemberCreateInput = {
   id?: string
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   store: Prisma.StoreCreateNestedOneWithoutMembersInput
   user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberUncheckedCreateInput = {
@@ -261,17 +298,25 @@ export type StoreMemberUncheckedCreateInput = {
   storeId: string
   userId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateInput = {
@@ -279,8 +324,12 @@ export type StoreMemberUncheckedUpdateInput = {
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberCreateManyInput = {
@@ -288,12 +337,15 @@ export type StoreMemberCreateManyInput = {
   storeId: string
   userId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StoreMemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -303,6 +355,8 @@ export type StoreMemberUncheckedUpdateManyInput = {
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -317,6 +371,11 @@ export type StoreMemberOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StoreMemberNullableScalarRelationFilter = {
+  is?: Prisma.StoreMemberWhereInput | null
+  isNot?: Prisma.StoreMemberWhereInput | null
+}
+
 export type StoreMemberStoreIdUserIdCompoundUniqueInput = {
   storeId: string
   userId: string
@@ -327,6 +386,8 @@ export type StoreMemberCountOrderByAggregateInput = {
   storeId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -336,6 +397,8 @@ export type StoreMemberMaxOrderByAggregateInput = {
   storeId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -345,6 +408,8 @@ export type StoreMemberMinOrderByAggregateInput = {
   storeId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   roleId?: Prisma.SortOrder
+  managerId?: Prisma.SortOrder
+  isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -475,20 +540,102 @@ export type StoreMemberUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.StoreMemberScalarWhereInput | Prisma.StoreMemberScalarWhereInput[]
 }
 
+export type StoreMemberCreateNestedOneWithoutSubordinatesInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedCreateWithoutSubordinatesInput>
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutSubordinatesInput
+  connect?: Prisma.StoreMemberWhereUniqueInput
+}
+
+export type StoreMemberCreateNestedManyWithoutManagerInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput> | Prisma.StoreMemberCreateWithoutManagerInput[] | Prisma.StoreMemberUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutManagerInput | Prisma.StoreMemberCreateOrConnectWithoutManagerInput[]
+  createMany?: Prisma.StoreMemberCreateManyManagerInputEnvelope
+  connect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+}
+
+export type StoreMemberUncheckedCreateNestedManyWithoutManagerInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput> | Prisma.StoreMemberCreateWithoutManagerInput[] | Prisma.StoreMemberUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutManagerInput | Prisma.StoreMemberCreateOrConnectWithoutManagerInput[]
+  createMany?: Prisma.StoreMemberCreateManyManagerInputEnvelope
+  connect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+}
+
+export type StoreMemberUpdateOneWithoutSubordinatesNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedCreateWithoutSubordinatesInput>
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutSubordinatesInput
+  upsert?: Prisma.StoreMemberUpsertWithoutSubordinatesInput
+  disconnect?: Prisma.StoreMemberWhereInput | boolean
+  delete?: Prisma.StoreMemberWhereInput | boolean
+  connect?: Prisma.StoreMemberWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreMemberUpdateToOneWithWhereWithoutSubordinatesInput, Prisma.StoreMemberUpdateWithoutSubordinatesInput>, Prisma.StoreMemberUncheckedUpdateWithoutSubordinatesInput>
+}
+
+export type StoreMemberUpdateManyWithoutManagerNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput> | Prisma.StoreMemberCreateWithoutManagerInput[] | Prisma.StoreMemberUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutManagerInput | Prisma.StoreMemberCreateOrConnectWithoutManagerInput[]
+  upsert?: Prisma.StoreMemberUpsertWithWhereUniqueWithoutManagerInput | Prisma.StoreMemberUpsertWithWhereUniqueWithoutManagerInput[]
+  createMany?: Prisma.StoreMemberCreateManyManagerInputEnvelope
+  set?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  disconnect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  delete?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  connect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  update?: Prisma.StoreMemberUpdateWithWhereUniqueWithoutManagerInput | Prisma.StoreMemberUpdateWithWhereUniqueWithoutManagerInput[]
+  updateMany?: Prisma.StoreMemberUpdateManyWithWhereWithoutManagerInput | Prisma.StoreMemberUpdateManyWithWhereWithoutManagerInput[]
+  deleteMany?: Prisma.StoreMemberScalarWhereInput | Prisma.StoreMemberScalarWhereInput[]
+}
+
+export type StoreMemberUncheckedUpdateManyWithoutManagerNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput> | Prisma.StoreMemberCreateWithoutManagerInput[] | Prisma.StoreMemberUncheckedCreateWithoutManagerInput[]
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutManagerInput | Prisma.StoreMemberCreateOrConnectWithoutManagerInput[]
+  upsert?: Prisma.StoreMemberUpsertWithWhereUniqueWithoutManagerInput | Prisma.StoreMemberUpsertWithWhereUniqueWithoutManagerInput[]
+  createMany?: Prisma.StoreMemberCreateManyManagerInputEnvelope
+  set?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  disconnect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  delete?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  connect?: Prisma.StoreMemberWhereUniqueInput | Prisma.StoreMemberWhereUniqueInput[]
+  update?: Prisma.StoreMemberUpdateWithWhereUniqueWithoutManagerInput | Prisma.StoreMemberUpdateWithWhereUniqueWithoutManagerInput[]
+  updateMany?: Prisma.StoreMemberUpdateManyWithWhereWithoutManagerInput | Prisma.StoreMemberUpdateManyWithWhereWithoutManagerInput[]
+  deleteMany?: Prisma.StoreMemberScalarWhereInput | Prisma.StoreMemberScalarWhereInput[]
+}
+
+export type StoreMemberCreateNestedOneWithoutAssignedOrdersInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedCreateWithoutAssignedOrdersInput>
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutAssignedOrdersInput
+  connect?: Prisma.StoreMemberWhereUniqueInput
+}
+
+export type StoreMemberUpdateOneWithoutAssignedOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreMemberCreateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedCreateWithoutAssignedOrdersInput>
+  connectOrCreate?: Prisma.StoreMemberCreateOrConnectWithoutAssignedOrdersInput
+  upsert?: Prisma.StoreMemberUpsertWithoutAssignedOrdersInput
+  disconnect?: Prisma.StoreMemberWhereInput | boolean
+  delete?: Prisma.StoreMemberWhereInput | boolean
+  connect?: Prisma.StoreMemberWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreMemberUpdateToOneWithWhereWithoutAssignedOrdersInput, Prisma.StoreMemberUpdateWithoutAssignedOrdersInput>, Prisma.StoreMemberUncheckedUpdateWithoutAssignedOrdersInput>
+}
+
 export type StoreMemberCreateWithoutUserInput = {
   id?: string
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   store: Prisma.StoreCreateNestedOneWithoutMembersInput
   role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberUncheckedCreateWithoutUserInput = {
   id?: string
   storeId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberCreateOrConnectWithoutUserInput = {
@@ -525,24 +672,34 @@ export type StoreMemberScalarWhereInput = {
   storeId?: Prisma.StringFilter<"StoreMember"> | string
   userId?: Prisma.StringFilter<"StoreMember"> | string
   roleId?: Prisma.StringFilter<"StoreMember"> | string
+  managerId?: Prisma.StringNullableFilter<"StoreMember"> | string | null
+  isAvailable?: Prisma.BoolFilter<"StoreMember"> | boolean
   createdAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StoreMember"> | Date | string
 }
 
 export type StoreMemberCreateWithoutStoreInput = {
   id?: string
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberUncheckedCreateWithoutStoreInput = {
   id?: string
   userId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberCreateOrConnectWithoutStoreInput = {
@@ -573,18 +730,26 @@ export type StoreMemberUpdateManyWithWhereWithoutStoreInput = {
 
 export type StoreMemberCreateWithoutRoleInput = {
   id?: string
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   store: Prisma.StoreCreateNestedOneWithoutMembersInput
   user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberUncheckedCreateWithoutRoleInput = {
   id?: string
   storeId: string
   userId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
 }
 
 export type StoreMemberCreateOrConnectWithoutRoleInput = {
@@ -613,34 +778,224 @@ export type StoreMemberUpdateManyWithWhereWithoutRoleInput = {
   data: Prisma.XOR<Prisma.StoreMemberUpdateManyMutationInput, Prisma.StoreMemberUncheckedUpdateManyWithoutRoleInput>
 }
 
+export type StoreMemberCreateWithoutSubordinatesInput = {
+  id?: string
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  store: Prisma.StoreCreateNestedOneWithoutMembersInput
+  user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
+  role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
+}
+
+export type StoreMemberUncheckedCreateWithoutSubordinatesInput = {
+  id?: string
+  storeId: string
+  userId: string
+  roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
+}
+
+export type StoreMemberCreateOrConnectWithoutSubordinatesInput = {
+  where: Prisma.StoreMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedCreateWithoutSubordinatesInput>
+}
+
+export type StoreMemberCreateWithoutManagerInput = {
+  id?: string
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  store: Prisma.StoreCreateNestedOneWithoutMembersInput
+  user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
+  role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderCreateNestedManyWithoutAssignedToInput
+}
+
+export type StoreMemberUncheckedCreateWithoutManagerInput = {
+  id?: string
+  storeId: string
+  userId: string
+  roleId: string
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+  assignedOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutAssignedToInput
+}
+
+export type StoreMemberCreateOrConnectWithoutManagerInput = {
+  where: Prisma.StoreMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput>
+}
+
+export type StoreMemberCreateManyManagerInputEnvelope = {
+  data: Prisma.StoreMemberCreateManyManagerInput | Prisma.StoreMemberCreateManyManagerInput[]
+  skipDuplicates?: boolean
+}
+
+export type StoreMemberUpsertWithoutSubordinatesInput = {
+  update: Prisma.XOR<Prisma.StoreMemberUpdateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedUpdateWithoutSubordinatesInput>
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedCreateWithoutSubordinatesInput>
+  where?: Prisma.StoreMemberWhereInput
+}
+
+export type StoreMemberUpdateToOneWithWhereWithoutSubordinatesInput = {
+  where?: Prisma.StoreMemberWhereInput
+  data: Prisma.XOR<Prisma.StoreMemberUpdateWithoutSubordinatesInput, Prisma.StoreMemberUncheckedUpdateWithoutSubordinatesInput>
+}
+
+export type StoreMemberUpdateWithoutSubordinatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
+}
+
+export type StoreMemberUncheckedUpdateWithoutSubordinatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
+}
+
+export type StoreMemberUpsertWithWhereUniqueWithoutManagerInput = {
+  where: Prisma.StoreMemberWhereUniqueInput
+  update: Prisma.XOR<Prisma.StoreMemberUpdateWithoutManagerInput, Prisma.StoreMemberUncheckedUpdateWithoutManagerInput>
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutManagerInput, Prisma.StoreMemberUncheckedCreateWithoutManagerInput>
+}
+
+export type StoreMemberUpdateWithWhereUniqueWithoutManagerInput = {
+  where: Prisma.StoreMemberWhereUniqueInput
+  data: Prisma.XOR<Prisma.StoreMemberUpdateWithoutManagerInput, Prisma.StoreMemberUncheckedUpdateWithoutManagerInput>
+}
+
+export type StoreMemberUpdateManyWithWhereWithoutManagerInput = {
+  where: Prisma.StoreMemberScalarWhereInput
+  data: Prisma.XOR<Prisma.StoreMemberUpdateManyMutationInput, Prisma.StoreMemberUncheckedUpdateManyWithoutManagerInput>
+}
+
+export type StoreMemberCreateWithoutAssignedOrdersInput = {
+  id?: string
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  store: Prisma.StoreCreateNestedOneWithoutMembersInput
+  user: Prisma.AdminUserCreateNestedOneWithoutMembershipsInput
+  role: Prisma.RoleCreateNestedOneWithoutMembersInput
+  manager?: Prisma.StoreMemberCreateNestedOneWithoutSubordinatesInput
+  subordinates?: Prisma.StoreMemberCreateNestedManyWithoutManagerInput
+}
+
+export type StoreMemberUncheckedCreateWithoutAssignedOrdersInput = {
+  id?: string
+  storeId: string
+  userId: string
+  roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subordinates?: Prisma.StoreMemberUncheckedCreateNestedManyWithoutManagerInput
+}
+
+export type StoreMemberCreateOrConnectWithoutAssignedOrdersInput = {
+  where: Prisma.StoreMemberWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedCreateWithoutAssignedOrdersInput>
+}
+
+export type StoreMemberUpsertWithoutAssignedOrdersInput = {
+  update: Prisma.XOR<Prisma.StoreMemberUpdateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedUpdateWithoutAssignedOrdersInput>
+  create: Prisma.XOR<Prisma.StoreMemberCreateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedCreateWithoutAssignedOrdersInput>
+  where?: Prisma.StoreMemberWhereInput
+}
+
+export type StoreMemberUpdateToOneWithWhereWithoutAssignedOrdersInput = {
+  where?: Prisma.StoreMemberWhereInput
+  data: Prisma.XOR<Prisma.StoreMemberUpdateWithoutAssignedOrdersInput, Prisma.StoreMemberUncheckedUpdateWithoutAssignedOrdersInput>
+}
+
+export type StoreMemberUpdateWithoutAssignedOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+}
+
+export type StoreMemberUncheckedUpdateWithoutAssignedOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+}
+
 export type StoreMemberCreateManyUserInput = {
   id?: string
   storeId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StoreMemberUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -649,30 +1004,42 @@ export type StoreMemberCreateManyStoreInput = {
   id?: string
   userId: string
   roleId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StoreMemberUpdateWithoutStoreInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateWithoutStoreInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateManyWithoutStoreInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -681,34 +1048,128 @@ export type StoreMemberCreateManyRoleInput = {
   id?: string
   storeId: string
   userId: string
+  managerId?: string | null
+  isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type StoreMemberUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
+  manager?: Prisma.StoreMemberUpdateOneWithoutSubordinatesNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
 }
 
 export type StoreMemberUncheckedUpdateManyWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   storeId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  managerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type StoreMemberCreateManyManagerInput = {
+  id?: string
+  storeId: string
+  userId: string
+  roleId: string
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type StoreMemberUpdateWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  store?: Prisma.StoreUpdateOneRequiredWithoutMembersNestedInput
+  user?: Prisma.AdminUserUpdateOneRequiredWithoutMembershipsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutMembersNestedInput
+  subordinates?: Prisma.StoreMemberUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUpdateManyWithoutAssignedToNestedInput
+}
+
+export type StoreMemberUncheckedUpdateWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subordinates?: Prisma.StoreMemberUncheckedUpdateManyWithoutManagerNestedInput
+  assignedOrders?: Prisma.OrderUncheckedUpdateManyWithoutAssignedToNestedInput
+}
+
+export type StoreMemberUncheckedUpdateManyWithoutManagerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  storeId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type StoreMemberCountOutputType
+ */
+
+export type StoreMemberCountOutputType = {
+  subordinates: number
+  assignedOrders: number
+}
+
+export type StoreMemberCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  subordinates?: boolean | StoreMemberCountOutputTypeCountSubordinatesArgs
+  assignedOrders?: boolean | StoreMemberCountOutputTypeCountAssignedOrdersArgs
+}
+
+/**
+ * StoreMemberCountOutputType without action
+ */
+export type StoreMemberCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreMemberCountOutputType
+   */
+  select?: Prisma.StoreMemberCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StoreMemberCountOutputType without action
+ */
+export type StoreMemberCountOutputTypeCountSubordinatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StoreMemberWhereInput
+}
+
+/**
+ * StoreMemberCountOutputType without action
+ */
+export type StoreMemberCountOutputTypeCountAssignedOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
+}
 
 
 export type StoreMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -716,11 +1177,17 @@ export type StoreMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   storeId?: boolean
   userId?: boolean
   roleId?: boolean
+  managerId?: boolean
+  isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
+  subordinates?: boolean | Prisma.StoreMember$subordinatesArgs<ExtArgs>
+  assignedOrders?: boolean | Prisma.StoreMember$assignedOrdersArgs<ExtArgs>
+  _count?: boolean | Prisma.StoreMemberCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["storeMember"]>
 
 export type StoreMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -728,11 +1195,14 @@ export type StoreMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   storeId?: boolean
   userId?: boolean
   roleId?: boolean
+  managerId?: boolean
+  isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
 }, ExtArgs["result"]["storeMember"]>
 
 export type StoreMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -740,11 +1210,14 @@ export type StoreMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   storeId?: boolean
   userId?: boolean
   roleId?: boolean
+  managerId?: boolean
+  isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
 }, ExtArgs["result"]["storeMember"]>
 
 export type StoreMemberSelectScalar = {
@@ -752,25 +1225,33 @@ export type StoreMemberSelectScalar = {
   storeId?: boolean
   userId?: boolean
   roleId?: boolean
+  managerId?: boolean
+  isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StoreMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storeId" | "userId" | "roleId" | "createdAt" | "updatedAt", ExtArgs["result"]["storeMember"]>
+export type StoreMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storeId" | "userId" | "roleId" | "managerId" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["storeMember"]>
 export type StoreMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
+  subordinates?: boolean | Prisma.StoreMember$subordinatesArgs<ExtArgs>
+  assignedOrders?: boolean | Prisma.StoreMember$assignedOrdersArgs<ExtArgs>
+  _count?: boolean | Prisma.StoreMemberCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StoreMemberIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
 }
 export type StoreMemberIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   store?: boolean | Prisma.StoreDefaultArgs<ExtArgs>
   user?: boolean | Prisma.AdminUserDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
+  manager?: boolean | Prisma.StoreMember$managerArgs<ExtArgs>
 }
 
 export type $StoreMemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -779,12 +1260,17 @@ export type $StoreMemberPayload<ExtArgs extends runtime.Types.Extensions.Interna
     store: Prisma.$StorePayload<ExtArgs>
     user: Prisma.$AdminUserPayload<ExtArgs>
     role: Prisma.$RolePayload<ExtArgs>
+    manager: Prisma.$StoreMemberPayload<ExtArgs> | null
+    subordinates: Prisma.$StoreMemberPayload<ExtArgs>[]
+    assignedOrders: Prisma.$OrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     storeId: string
     userId: string
     roleId: string
+    managerId: string | null
+    isAvailable: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["storeMember"]>
@@ -1184,6 +1670,9 @@ export interface Prisma__StoreMemberClient<T, Null = never, ExtArgs extends runt
   store<T extends Prisma.StoreDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreDefaultArgs<ExtArgs>>): Prisma.Prisma__StoreClient<runtime.Types.Result.GetResult<Prisma.$StorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.AdminUserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUserDefaultArgs<ExtArgs>>): Prisma.Prisma__AdminUserClient<runtime.Types.Result.GetResult<Prisma.$AdminUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  manager<T extends Prisma.StoreMember$managerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreMember$managerArgs<ExtArgs>>): Prisma.Prisma__StoreMemberClient<runtime.Types.Result.GetResult<Prisma.$StoreMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subordinates<T extends Prisma.StoreMember$subordinatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreMember$subordinatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoreMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedOrders<T extends Prisma.StoreMember$assignedOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StoreMember$assignedOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1217,6 +1706,8 @@ export interface StoreMemberFieldRefs {
   readonly storeId: Prisma.FieldRef<"StoreMember", 'String'>
   readonly userId: Prisma.FieldRef<"StoreMember", 'String'>
   readonly roleId: Prisma.FieldRef<"StoreMember", 'String'>
+  readonly managerId: Prisma.FieldRef<"StoreMember", 'String'>
+  readonly isAvailable: Prisma.FieldRef<"StoreMember", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"StoreMember", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"StoreMember", 'DateTime'>
 }
@@ -1612,6 +2103,73 @@ export type StoreMemberDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many StoreMembers to delete.
    */
   limit?: number
+}
+
+/**
+ * StoreMember.manager
+ */
+export type StoreMember$managerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreMember
+   */
+  select?: Prisma.StoreMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StoreMember
+   */
+  omit?: Prisma.StoreMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreMemberInclude<ExtArgs> | null
+  where?: Prisma.StoreMemberWhereInput
+}
+
+/**
+ * StoreMember.subordinates
+ */
+export type StoreMember$subordinatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoreMember
+   */
+  select?: Prisma.StoreMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StoreMember
+   */
+  omit?: Prisma.StoreMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoreMemberInclude<ExtArgs> | null
+  where?: Prisma.StoreMemberWhereInput
+  orderBy?: Prisma.StoreMemberOrderByWithRelationInput | Prisma.StoreMemberOrderByWithRelationInput[]
+  cursor?: Prisma.StoreMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StoreMemberScalarFieldEnum | Prisma.StoreMemberScalarFieldEnum[]
+}
+
+/**
+ * StoreMember.assignedOrders
+ */
+export type StoreMember$assignedOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
 }
 
 /**

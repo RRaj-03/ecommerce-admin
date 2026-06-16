@@ -29,6 +29,7 @@ export type PermissionMinAggregateOutputType = {
   roleId: string | null
   resource: string | null
   action: string | null
+  scope: string | null
 }
 
 export type PermissionMaxAggregateOutputType = {
@@ -36,6 +37,7 @@ export type PermissionMaxAggregateOutputType = {
   roleId: string | null
   resource: string | null
   action: string | null
+  scope: string | null
 }
 
 export type PermissionCountAggregateOutputType = {
@@ -43,6 +45,7 @@ export type PermissionCountAggregateOutputType = {
   roleId: number
   resource: number
   action: number
+  scope: number
   _all: number
 }
 
@@ -52,6 +55,7 @@ export type PermissionMinAggregateInputType = {
   roleId?: true
   resource?: true
   action?: true
+  scope?: true
 }
 
 export type PermissionMaxAggregateInputType = {
@@ -59,6 +63,7 @@ export type PermissionMaxAggregateInputType = {
   roleId?: true
   resource?: true
   action?: true
+  scope?: true
 }
 
 export type PermissionCountAggregateInputType = {
@@ -66,6 +71,7 @@ export type PermissionCountAggregateInputType = {
   roleId?: true
   resource?: true
   action?: true
+  scope?: true
   _all?: true
 }
 
@@ -146,6 +152,7 @@ export type PermissionGroupByOutputType = {
   roleId: string
   resource: string
   action: string
+  scope: string
   _count: PermissionCountAggregateOutputType | null
   _min: PermissionMinAggregateOutputType | null
   _max: PermissionMaxAggregateOutputType | null
@@ -174,6 +181,7 @@ export type PermissionWhereInput = {
   roleId?: Prisma.StringFilter<"Permission"> | string
   resource?: Prisma.StringFilter<"Permission"> | string
   action?: Prisma.StringFilter<"Permission"> | string
+  scope?: Prisma.StringFilter<"Permission"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
 }
 
@@ -182,6 +190,7 @@ export type PermissionOrderByWithRelationInput = {
   roleId?: Prisma.SortOrder
   resource?: Prisma.SortOrder
   action?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
 }
 
@@ -194,6 +203,7 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   roleId?: Prisma.StringFilter<"Permission"> | string
   resource?: Prisma.StringFilter<"Permission"> | string
   action?: Prisma.StringFilter<"Permission"> | string
+  scope?: Prisma.StringFilter<"Permission"> | string
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
 }, "id" | "roleId_resource_action">
 
@@ -202,6 +212,7 @@ export type PermissionOrderByWithAggregationInput = {
   roleId?: Prisma.SortOrder
   resource?: Prisma.SortOrder
   action?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
   _count?: Prisma.PermissionCountOrderByAggregateInput
   _max?: Prisma.PermissionMaxOrderByAggregateInput
   _min?: Prisma.PermissionMinOrderByAggregateInput
@@ -215,12 +226,14 @@ export type PermissionScalarWhereWithAggregatesInput = {
   roleId?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   resource?: Prisma.StringWithAggregatesFilter<"Permission"> | string
   action?: Prisma.StringWithAggregatesFilter<"Permission"> | string
+  scope?: Prisma.StringWithAggregatesFilter<"Permission"> | string
 }
 
 export type PermissionCreateInput = {
   id?: string
   resource: string
   action: string
+  scope?: string
   role: Prisma.RoleCreateNestedOneWithoutPermissionsInput
 }
 
@@ -229,12 +242,14 @@ export type PermissionUncheckedCreateInput = {
   roleId: string
   resource: string
   action: string
+  scope?: string
 }
 
 export type PermissionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.RoleUpdateOneRequiredWithoutPermissionsNestedInput
 }
 
@@ -243,6 +258,7 @@ export type PermissionUncheckedUpdateInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PermissionCreateManyInput = {
@@ -250,12 +266,14 @@ export type PermissionCreateManyInput = {
   roleId: string
   resource: string
   action: string
+  scope?: string
 }
 
 export type PermissionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PermissionUncheckedUpdateManyInput = {
@@ -263,6 +281,7 @@ export type PermissionUncheckedUpdateManyInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PermissionListRelationFilter = {
@@ -286,6 +305,7 @@ export type PermissionCountOrderByAggregateInput = {
   roleId?: Prisma.SortOrder
   resource?: Prisma.SortOrder
   action?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
 }
 
 export type PermissionMaxOrderByAggregateInput = {
@@ -293,6 +313,7 @@ export type PermissionMaxOrderByAggregateInput = {
   roleId?: Prisma.SortOrder
   resource?: Prisma.SortOrder
   action?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
 }
 
 export type PermissionMinOrderByAggregateInput = {
@@ -300,6 +321,7 @@ export type PermissionMinOrderByAggregateInput = {
   roleId?: Prisma.SortOrder
   resource?: Prisma.SortOrder
   action?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
 }
 
 export type PermissionCreateNestedManyWithoutRoleInput = {
@@ -348,12 +370,14 @@ export type PermissionCreateWithoutRoleInput = {
   id?: string
   resource: string
   action: string
+  scope?: string
 }
 
 export type PermissionUncheckedCreateWithoutRoleInput = {
   id?: string
   resource: string
   action: string
+  scope?: string
 }
 
 export type PermissionCreateOrConnectWithoutRoleInput = {
@@ -390,30 +414,35 @@ export type PermissionScalarWhereInput = {
   roleId?: Prisma.StringFilter<"Permission"> | string
   resource?: Prisma.StringFilter<"Permission"> | string
   action?: Prisma.StringFilter<"Permission"> | string
+  scope?: Prisma.StringFilter<"Permission"> | string
 }
 
 export type PermissionCreateManyRoleInput = {
   id?: string
   resource: string
   action: string
+  scope?: string
 }
 
 export type PermissionUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PermissionUncheckedUpdateWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PermissionUncheckedUpdateManyWithoutRoleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -423,6 +452,7 @@ export type PermissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   roleId?: boolean
   resource?: boolean
   action?: boolean
+  scope?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["permission"]>
 
@@ -431,6 +461,7 @@ export type PermissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   roleId?: boolean
   resource?: boolean
   action?: boolean
+  scope?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["permission"]>
 
@@ -439,6 +470,7 @@ export type PermissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   roleId?: boolean
   resource?: boolean
   action?: boolean
+  scope?: boolean
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["permission"]>
 
@@ -447,9 +479,10 @@ export type PermissionSelectScalar = {
   roleId?: boolean
   resource?: boolean
   action?: boolean
+  scope?: boolean
 }
 
-export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roleId" | "resource" | "action", ExtArgs["result"]["permission"]>
+export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "roleId" | "resource" | "action" | "scope", ExtArgs["result"]["permission"]>
 export type PermissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
 }
@@ -470,6 +503,7 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     roleId: string
     resource: string
     action: string
+    scope: string
   }, ExtArgs["result"]["permission"]>
   composites: {}
 }
@@ -898,6 +932,7 @@ export interface PermissionFieldRefs {
   readonly roleId: Prisma.FieldRef<"Permission", 'String'>
   readonly resource: Prisma.FieldRef<"Permission", 'String'>
   readonly action: Prisma.FieldRef<"Permission", 'String'>
+  readonly scope: Prisma.FieldRef<"Permission", 'String'>
 }
     
 

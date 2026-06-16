@@ -68,6 +68,8 @@ model Role {
   name        String
   description String?
   isSystem    Boolean      @default(false)
+  level       Int          @default(100) // lower = more powerful. Owner=0, Admin=10, Manager=50, Staff=100
+  canDelegate Boolean      @default(false) // can this role create new sub-roles?
   permissions Permission[]
   members     StoreMember[]
   invites     StoreInvite[]
@@ -84,25 +86,32 @@ model Permission {
   role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   resource String
   action   String
+  scope    String @default("all") // "all" | "assigned" | "subordinates"
 
   @@unique([roleId, resource, action])
   @@index([roleId])
 }
 
 model StoreMember {
-  id        String    @id @default(uuid())
-  storeId   String
-  store     Store     @relation("StoreToMember", fields: [storeId], references: [id], onDelete: Cascade)
-  userId    String
-  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roleId    String
-  role      Role      @relation(fields: [roleId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           String    @id @default(uuid())
+  storeId      String
+  store        Store     @relation("StoreToMember", fields: [storeId], references: [id], onDelete: Cascade)
+  userId       String
+  user         AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId       String
+  role         Role      @relation(fields: [roleId], references: [id])
+  managerId    String?
+  manager      StoreMember?  @relation("ReportingStructure", fields: [managerId], references: [id], onDelete: SetNull)
+  subordinates StoreMember[] @relation("ReportingStructure")
+  isAvailable  Boolean       @default(true)
+  assignedOrders Order[]     @relation("OrderAssignment")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@unique([storeId, userId])
   @@index([storeId])
   @@index([userId])
+  @@index([managerId])
 }
 
 model StoreInvite {
@@ -351,6 +360,11 @@ model Order {
   totalAmount       Decimal              @default(0)
   taxAmount         Decimal              @default(0)
 
+  // Assignment
+  assignedToId      String?
+  assignedTo        StoreMember?         @relation("OrderAssignment", fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignmentHistory OrderAssignmentHistory[]
+
   // Enhanced tracking fields
   trackingNumber    String?
   trackingUrl       String?
@@ -364,6 +378,7 @@ model Order {
 
   @@index([storeId])
   @@index([userId])
+  @@index([assignedToId])
 }
 
 model OrderStatusHistory {
@@ -373,6 +388,19 @@ model OrderStatusHistory {
   status    String
   note      String?
   createdAt DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model OrderAssignmentHistory {
+  id             String   @id @default(uuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  assignedById   String   // userId of who made the assignment
+  assignedToId   String   // memberId of who it was assigned to
+  previousToId   String?  // memberId of previous assignee (null if first assignment)
+  note           String?
+  createdAt      DateTime @default(now())
 
   @@index([orderId])
 }

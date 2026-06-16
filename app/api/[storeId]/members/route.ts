@@ -2,6 +2,7 @@ import prismadb from "@/lib/prismadb";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/rbac";
+import { sendInviteEmail } from "@/lib/email";
 
 export async function GET(
   req: Request,
@@ -121,6 +122,16 @@ export async function POST(
         role: { select: { id: true, name: true } },
       },
     });
+
+    // Send invite email
+    const store = await prismadb.store.findUnique({ where: { id: params.storeId }, select: { name: true } });
+    const inviter = await prismadb.adminUser.findUnique({ where: { id: userId }, select: { name: true } });
+    sendInviteEmail(
+      email,
+      store?.name || "Store",
+      role.name,
+      inviter?.name || "Team Admin"
+    );
 
     return NextResponse.json({ type: "invite_created", invite });
   } catch (error) {

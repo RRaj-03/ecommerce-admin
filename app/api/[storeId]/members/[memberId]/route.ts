@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/rbac";
 
-// Update member role
+// Update member (role, manager, availability)
 export async function PATCH(
   req: Request,
   { params }: { params: { storeId: string; memberId: string } }
@@ -12,17 +12,19 @@ export async function PATCH(
     const { userId } = await auth();
     if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
 
-    const check = await requirePermission(userId, params.storeId, "roles", "update");
+    const check = await requirePermission(userId, params.storeId, "team", "update");
     if (!check.allowed) return new NextResponse(check.message, { status: check.status });
 
     const body = await req.json();
-    const { roleId } = body;
+    const updateData: any = {};
 
-    if (!roleId) return new NextResponse("Role is required", { status: 400 });
+    if (body.roleId !== undefined) updateData.roleId = body.roleId;
+    if (body.managerId !== undefined) updateData.managerId = body.managerId || null;
+    if (body.isAvailable !== undefined) updateData.isAvailable = body.isAvailable;
 
     const member = await prismadb.storeMember.update({
       where: { id: params.memberId },
-      data: { roleId },
+      data: updateData,
       include: {
         user: { select: { id: true, name: true, email: true } },
         role: { select: { id: true, name: true } },
@@ -45,10 +47,9 @@ export async function DELETE(
     const { userId } = await auth();
     if (!userId) return new NextResponse("Unauthenticated", { status: 401 });
 
-    const check = await requirePermission(userId, params.storeId, "roles", "delete");
+    const check = await requirePermission(userId, params.storeId, "team", "delete");
     if (!check.allowed) return new NextResponse(check.message, { status: check.status });
 
-    // Prevent removing the store owner
     const store = await prismadb.store.findUnique({
       where: { id: params.storeId },
       select: { userId: true },

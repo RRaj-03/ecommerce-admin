@@ -19,14 +19,18 @@ import {
   RESOURCE_ACTIONS,
   RESOURCE_LABELS,
   ACTION_LABELS,
+  SCOPE_LABELS,
+  SCOPEABLE_RESOURCES,
   Resource,
   Action,
+  Scope,
 } from "@/lib/permissions";
 
 interface Permission {
   id: string;
   resource: string;
   action: string;
+  scope: string;
 }
 
 interface RoleWithPermissions {
@@ -34,6 +38,8 @@ interface RoleWithPermissions {
   name: string;
   description: string | null;
   isSystem: boolean;
+  level: number;
+  canDelegate: boolean;
   permissions: Permission[];
   _count: { members: number };
 }
@@ -80,6 +86,9 @@ export function RolesClient({
   const [roleName, setRoleName] = useState("");
   const [roleDescription, setRoleDescription] = useState("");
   const [rolePermissions, setRolePermissions] = useState<Set<string>>(new Set());
+  const [roleLevel, setRoleLevel] = useState(100);
+  const [roleCanDelegate, setRoleCanDelegate] = useState(false);
+  const [permissionScopes, setPermissionScopes] = useState<Record<string, Scope>>({});
   const [isCreatingRole, setIsCreatingRole] = useState(false);
 
   // Invite state
@@ -126,6 +135,11 @@ export function RolesClient({
     setRoleName(role.name);
     setRoleDescription(role.description || "");
     setRolePermissions(new Set(role.permissions.map((p) => `${p.resource}:${p.action}`)));
+    setRoleLevel(role.level);
+    setRoleCanDelegate(role.canDelegate);
+    const scopes: Record<string, Scope> = {};
+    role.permissions.forEach((p) => { scopes[`${p.resource}:${p.action}`] = p.scope as Scope; });
+    setPermissionScopes(scopes);
     setIsCreatingRole(false);
   };
 
@@ -134,6 +148,9 @@ export function RolesClient({
     setRoleName("");
     setRoleDescription("");
     setRolePermissions(new Set());
+    setRoleLevel(100);
+    setRoleCanDelegate(false);
+    setPermissionScopes({});
     setIsCreatingRole(true);
   };
 
@@ -150,7 +167,7 @@ export function RolesClient({
 
     const permissions = Array.from(rolePermissions).map((key) => {
       const [resource, action] = key.split(":");
-      return { resource, action };
+      return { resource, action, scope: permissionScopes[key] || "all" };
     });
 
     setLoading(true);
@@ -160,6 +177,8 @@ export function RolesClient({
           name: roleName,
           description: roleDescription,
           permissions,
+          level: roleLevel,
+          canDelegate: roleCanDelegate,
         });
         setRoles([...roles, { ...res.data, _count: { members: 0 } }]);
         toast.success("Role created");
@@ -168,6 +187,8 @@ export function RolesClient({
           name: roleName,
           description: roleDescription,
           permissions,
+          level: roleLevel,
+          canDelegate: roleCanDelegate,
         });
         setRoles(roles.map((r) => (r.id === editingRole ? { ...res.data, _count: r._count } : r)));
         toast.success("Role updated");
@@ -268,16 +289,17 @@ export function RolesClient({
 
   // Permission Matrix Component
   const PermissionMatrix = () => (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="border rounded-lg overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-muted/50">
             <th className="text-left p-3 font-semibold">Resource</th>
-            {(["view", "create", "update", "delete", "export"] as Action[]).map((action) => (
+            {(["view", "create", "update", "delete", "export", "assign"] as Action[]).map((action) => (
               <th key={action} className="text-center p-3 font-semibold w-20">
                 {ACTION_LABELS[action]}
               </th>
             ))}
+            <th className="text-center p-3 font-semibold w-28">Scope</th>
           </tr>
         </thead>
         <tbody>
@@ -286,6 +308,7 @@ export function RolesClient({
             const allChecked = availableActions.every((a) =>
               rolePermissions.has(`${resource}:${a}`)
             );
+            const isScopeable = SCOPEABLE_RESOURCES.includes(resource);
             return (
               <tr key={resource} className="border-t hover:bg-muted/30">
                 <td className="p-3">
@@ -297,7 +320,7 @@ export function RolesClient({
                     <span className="font-medium">{RESOURCE_LABELS[resource]}</span>
                   </div>
                 </td>
-                {(["view", "create", "update", "delete", "export"] as Action[]).map((action) => (
+                {(["view", "create", "update", "delete", "export", "assign"] as Action[]).map((action) => (
                   <td key={action} className="text-center p-3">
                     {availableActions.includes(action) ? (
                       <Checkbox
@@ -309,6 +332,31 @@ export function RolesClient({
                     )}
                   </td>
                 ))}
+                <td className="text-center p-3">
+                  {isScopeable ? (
+                    <Select
+                      value={permissionScopes[`${resource}:view`] || "all"}
+                      onValueChange={(val) => {
+                        const next = { ...permissionScopes };
+                        availableActions.forEach((a) => {
+                          next[`${resource}:${a}`] = val as Scope;
+                        });
+                        setPermissionScopes(next);
+                      }}
+                    >
+                      <SelectTrigger className="h-8 w-28 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{SCOPE_LABELS.all}</SelectItem>
+                        <SelectItem value="assigned">{SCOPE_LABELS.assigned}</SelectItem>
+                        <SelectItem value="subordinates">{SCOPE_LABELS.subordinates}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">Global</span>
+                  )}
+                </td>
               </tr>
             );
           })}
@@ -422,7 +470,7 @@ export function RolesClient({
             <CardTitle>{isCreatingRole ? "Create New Role" : `Edit Role: ${roleName}`}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label>Role Name</Label>
                 <Input
@@ -440,6 +488,26 @@ export function RolesClient({
                   placeholder="What this role can do..."
                   disabled={loading}
                 />
+              </div>
+              <div className="space-y-2">
+                <Label>Power Level <span className="text-xs text-muted-foreground">(lower = more powerful)</span></Label>
+                <Input
+                  type="number"
+                  value={roleLevel}
+                  onChange={(e) => setRoleLevel(parseInt(e.target.value) || 100)}
+                  min={1}
+                  disabled={loading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Can Create Sub-Roles?</Label>
+                <div className="flex items-center gap-2 h-10">
+                  <Checkbox
+                    checked={roleCanDelegate}
+                    onCheckedChange={(val) => setRoleCanDelegate(!!val)}
+                  />
+                  <span className="text-sm text-muted-foreground">Yes, allow delegated role creation</span>
+                </div>
               </div>
             </div>
 

@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cellAction";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 
 export type OrderColumn = {
   id: string;
@@ -20,6 +22,7 @@ export type OrderColumn = {
   transactionId: string;
   status: string;
   paymentMethod: string;
+  assigneeName: string | null;
   orderItemsRaw: any[];
 };
 
@@ -40,6 +43,28 @@ export const columns: ColumnDef<OrderColumn>[] = [
         </button>
       ) : null;
     },
+  },
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
   {
     accessorKey: "products",
@@ -92,6 +117,14 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "status",
     header: "Status",
+  },
+  {
+    accessorKey: "assigneeName",
+    header: "Assigned To",
+    cell: ({ row }) => {
+      const name = row.original.assigneeName;
+      return name ? <Badge variant="secondary">{name}</Badge> : <span className="text-muted-foreground text-xs">Unassigned</span>;
+    }
   },
   {
     id: "actions",

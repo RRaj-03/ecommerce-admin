@@ -70,6 +70,7 @@ export const ModelName = {
   Image: 'Image',
   Order: 'Order',
   OrderStatusHistory: 'OrderStatusHistory',
+  OrderAssignmentHistory: 'OrderAssignmentHistory',
   OrderItem: 'OrderItem',
   CustomerAddress: 'CustomerAddress'
 } as const
@@ -140,6 +141,8 @@ export const RoleScalarFieldEnum = {
   name: 'name',
   description: 'description',
   isSystem: 'isSystem',
+  level: 'level',
+  canDelegate: 'canDelegate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -151,7 +154,8 @@ export const PermissionScalarFieldEnum = {
   id: 'id',
   roleId: 'roleId',
   resource: 'resource',
-  action: 'action'
+  action: 'action',
+  scope: 'scope'
 } as const
 
 export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof typeof PermissionScalarFieldEnum]
@@ -162,6 +166,8 @@ export const StoreMemberScalarFieldEnum = {
   storeId: 'storeId',
   userId: 'userId',
   roleId: 'roleId',
+  managerId: 'managerId',
+  isAvailable: 'isAvailable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -370,6 +376,7 @@ export const OrderScalarFieldEnum = {
   refundReciptUrl: 'refundReciptUrl',
   totalAmount: 'totalAmount',
   taxAmount: 'taxAmount',
+  assignedToId: 'assignedToId',
   trackingNumber: 'trackingNumber',
   trackingUrl: 'trackingUrl',
   carrier: 'carrier',
@@ -391,6 +398,19 @@ export const OrderStatusHistoryScalarFieldEnum = {
 } as const
 
 export type OrderStatusHistoryScalarFieldEnum = (typeof OrderStatusHistoryScalarFieldEnum)[keyof typeof OrderStatusHistoryScalarFieldEnum]
+
+
+export const OrderAssignmentHistoryScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  assignedById: 'assignedById',
+  assignedToId: 'assignedToId',
+  previousToId: 'previousToId',
+  note: 'note',
+  createdAt: 'createdAt'
+} as const
+
+export type OrderAssignmentHistoryScalarFieldEnum = (typeof OrderAssignmentHistoryScalarFieldEnum)[keyof typeof OrderAssignmentHistoryScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {

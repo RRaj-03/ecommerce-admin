@@ -12,10 +12,11 @@ import {
   ExpandedState,
   FilterFn,
   VisibilityState,
-  ColumnPinningState,
   SortingState,
   getSortedRowModel,
   Column,
+  ColumnPinningState,
+  RowSelectionState,
 } from "@tanstack/react-table";
 
 import {
@@ -46,8 +47,11 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from "./dropdown-menu";
-import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import {
   Select,
   SelectTrigger,
@@ -63,6 +67,7 @@ interface DataTableProps<TData, TValue> {
   setIsPaid?: (isPaid: boolean) => void;
   isPaid?: boolean;
   renderSubComponent?: (props: { row: any }) => React.ReactNode;
+  renderToolbar?: (selectedRows: TData[], clearSelection: () => void) => React.ReactNode;
 }
 
 const advancedFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
@@ -260,17 +265,17 @@ function ColumnHeaderMenu({ column }: { column: Column<any, unknown> }) {
         )}
 
         {canFilter && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                <Filter className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Filter
-              </DropdownMenuItem>
-            </PopoverTrigger>
-            <PopoverContent className="w-64" side="right" align="start">
-              <ColumnFilterForm column={column} />
-            </PopoverContent>
-          </Popover>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Filter className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Filter
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent className="w-64" onKeyDown={(e) => e.stopPropagation()}>
+                <ColumnFilterForm column={column} />
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         )}
 
         {canPin && (
@@ -309,6 +314,7 @@ export function DataTable<TData, TValue>({
   setIsPaid,
   isPaid,
   renderSubComponent,
+  renderToolbar,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -316,6 +322,9 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
+  const clearSelection = () => setRowSelection({});
 
   const enhancedColumns = React.useMemo(
     () =>
@@ -342,6 +351,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getRowCanExpand: () => true,
     onExpandedChange: setExpanded,
+    onRowSelectionChange: setRowSelection,
     state: {
       columnFilters,
       expanded,
@@ -349,11 +359,18 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       columnPinning,
       sorting,
+      rowSelection,
     },
   });
 
   return (
     <div>
+      {renderToolbar && (
+        renderToolbar(
+          table.getFilteredSelectedRowModel().rows.map(row => row.original),
+          clearSelection
+        )
+      )}
       <div className="flex items-center justify-between py-4">
         {setIsPaid && (
           <div className="flex items-center gap-x-2">

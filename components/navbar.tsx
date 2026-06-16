@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import React from "react";
-import { MainNav } from "./mainNav";
 import StoreSwitcher from "./storeSwitcher";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
@@ -22,10 +21,11 @@ const Navbar = async () => {
   });
 
   return (
-    <div className="border-b shadow-md">
-      <div className="flex h-16 items-center px-4">
+    <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30">
+      <div className="flex h-14 items-center px-4">
+        {/* Spacer for mobile hamburger */}
+        <div className="w-10 lg:hidden" />
         <StoreSwitcher items={stores} />
-        <MainNav className="mx-6" />
         <div className="ml-auto flex items-center space-x-3">
           <ThemeToggle />
           <AdminNavUser name={session.name || "Admin"} />
